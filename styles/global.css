@@ -1,0 +1,10 @@
+* {
+    font-family: 'Quicksand', sans-serif;
+}
+
+.bg-search {
+    background-image: url('/icons/search.svg');
+    background-repeat: no-repeat;
+    background-position: 10px;
+    background-size: 15px;
+}
