@@ -1,48 +1,103 @@
-import Head from 'next/head'
-import UnivItem from '@components/UnivItem'
-import univList from '@request/univlist.json'
-import HeaderPagesInformation from '@components/HeaderPagesInformation'
+import Head from "next/head";
+import UnivItem from "@components/UnivItem";
+import HeaderPagesInformation from "@components/HeaderPagesInformation";
+import MyCheckbox from "@components/MyCheckbox";
+import { useState, useEffect } from "react";
 
 const university = () => {
+    const [universities, setUniversities] = useState([]);
+    const [isCheckAll, setCheckAll] = useState(false);
+
+    useEffect(async () => {
+        try {
+            const res = await fetch("/api/informations/universitys");
+            const resJson = await res.json();
+            const univ = resJson.map((item) => ({ ...item, isChecked: false }));
+            setUniversities(univ);
+        } catch (error) {
+            console.log(error);
+        }
+    }, []);
+
+    function handleChangeCheck(id) {
+        const updatedUniv = universities.map((item) => {
+            if (item.id === id) {
+                item.isChecked = !item.isChecked;
+                return item;
+            }
+
+            return item;
+        });
+
+        setUniversities(updatedUniv);
+    }
+
+    const handleCheckAll = () => {
+        const checkCounter = universities.reduce((prev, curr) => {
+            if (curr.isChecked) prev++;
+            return prev;
+        }, 0);
+
+        let isAll = false;
+        // jika jumlah check tidak sama dgn panjang univ maka check semua
+        if (checkCounter < universities.length) isAll = true;
+
+        setCheckAll(isAll);
+        universities.map((item) => {
+            item.isChecked = isAll;
+            return item;
+        });
+    };
+
     return (
         <>
             <Head>
                 <title>Informasi Kampus / Jurusan</title>
             </Head>
             <div>
-                <HeaderPagesInformation title="Informasi Kampus / Jurusan" uploadPagePath={''} />
+                <HeaderPagesInformation
+                    title="Informasi Kampus / Jurusan"
+                    uploadPagePath="/informations/university"
+                />
                 <div className="bg-white rounded-md mt-8">
                     <div className=" border-gray-300">
                         <div className="p-4 flex justify-between">
-                            <div className="flex items-center">
-                                <label className="flex justify-start items-start">
-                                    <div className="bg-white border-2 rounded border-gray-400 w-6 h-6 flex flex-shrink-0 justify-center items-center mr-2 focus-within:border-primary">
-                                        <input type="checkbox" className="opacity-0 absolute" />
-                                        <svg className="fill-current hidden w-4 h-4 text-primary pointer-events-none" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z" /></svg>
-                                    </div>
-                                </label>
-                                <label htmlFor="selectAll" className="text-lg ml-2">
-                                    Select All
-                                </label>
-                            </div>
+                            <MyCheckbox
+                                label="Select All"
+                                name="checkall"
+                                isChecked={isCheckAll}
+                                onChange={handleCheckAll}
+                            />
                             <div className="flex items-center">
                                 <label className="mr-3">Filter By</label>
                                 <select className="border-2 border-gray-300 px-3 py-1 rounded-md min-w-[190px] mr-3">
                                     <option value="">All post</option>
                                 </select>
-                                <input className="bg-search border-2 border-gray-300 px-3 pl-8 py-1 rounded-md min-w-[190px]" placeholder="Search" />
+                                <input
+                                    className="bg-search border-2 border-gray-300 px-3 pl-8 py-1 rounded-md min-w-[190px]"
+                                    placeholder="Search"
+                                />
                             </div>
                         </div>
-                        {
-                            univList.map(({ id, name, address, img }) => (
-                                <UnivItem key={id} name={name} address={address} img={img} />
-                            ))
-                        }
+                        {universities.map(
+                            ({ id, name, address, img, isChecked }) => (
+                                <UnivItem
+                                    key={id}
+                                    name={name}
+                                    address={address}
+                                    img={img}
+                                    isChecked={isChecked}
+                                    onChangeCheck={(e) => {
+                                        handleChangeCheck(id);
+                                    }}
+                                />
+                            )
+                        )}
                     </div>
                 </div>
             </div>
         </>
-    )
-}
+    );
+};
 
-export default university
+export default university;
