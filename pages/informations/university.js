@@ -57,7 +57,7 @@ const university = () => {
             <div>
                 <HeaderPagesInformation
                     title="Informasi Kampus / Jurusan"
-                    uploadPagePath="/informations/university"
+                    uploadPagePath="/informations/university/add"
                 />
                 <div className="bg-white rounded-md mt-8">
                     <div className=" border-gray-300">
