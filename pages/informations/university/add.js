@@ -1,21 +1,33 @@
+import React from "react";
 import Button from "@components/inputs/Button";
 import Input from "@components/inputs/Input";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import TextArea from "@components/inputs/TextArea";
 import schema from "@libs/yum/schema/universityCreate";
 import HeaderPageAdd from "@components/domain/informations/HeaderPageAdd";
+import Editor from "@components/inputs/TextEditor";
+import File from "@components/inputs/File";
+import Publish from "@components/domain/informations/university/CardPublish";
+import CardCategory from "@components/domain/informations/university/CardCategory";
 
 const AddUniversity = () => {
+    const [editorLoaded, setEditorLoaded] = React.useState(false);
+
     const {
         register,
         handleSubmit,
+        setValue,
         watch,
         formState: { errors },
     } = useForm({
         resolver: yupResolver(schema),
     });
+
+    React.useEffect(() => {
+        setEditorLoaded(true);
+        register("editor");
+    }, []);
 
     const onSubmit = (data) => console.log(data);
     return (
@@ -23,8 +35,11 @@ const AddUniversity = () => {
             <HeaderPageAdd>Buat Informasi Mahasiswa</HeaderPageAdd>
 
             {/* validasi dgn handleSubmit */}
-            <form onSubmit={handleSubmit(onSubmit)} className="flex gap-8">
-                <div className="w-full lg:w-4/12">
+            <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="grid sm:grid-cols-1 lg:grid-cols-[1fr,1fr,300px] gap-4"
+            >
+                <div>
                     <Input
                         label="Nama Rangking Nasional"
                         {...register("univName")}
@@ -42,6 +57,14 @@ const AddUniversity = () => {
                     />
 
                     <Input
+                        label="Status"
+                        {...register("univStatus")}
+                        {...(errors.univStatus?.message && {
+                            errorMessage: errors.univStatus?.message,
+                        })}
+                    />
+
+                    <Input
                         label="Jenis"
                         {...register("univType")}
                         {...(errors.univType?.message && {
@@ -51,12 +74,13 @@ const AddUniversity = () => {
 
                     <TextArea
                         label="Alamat"
+                        rows="4"
                         {...(errors.univAddress?.message && {
                             errorMessage: errors.univAddress?.message,
                         })}
                     ></TextArea>
                 </div>
-                <div className="w-full lg:w-4/12">
+                <div>
                     <Input
                         label="Rangking Nasional"
                         {...register("univNationalRank")}
@@ -75,14 +99,32 @@ const AddUniversity = () => {
 
                     <TextArea
                         label="Visi dan Misi"
+                        rows="5"
                         {...(errors.univVisionMission?.message && {
                             errorMessage: errors.univVisionMission?.message,
                         })}
                     ></TextArea>
-
-                    <Button type="submit" className="bg-white">
+                    <File label="Upload Logo" {...register("univLogo")} />
+                    <File
+                        label="Upload Background"
+                        {...register("univBackground")}
+                    />
+                </div>
+                <div>
+                    <Publish />
+                    <CardCategory />
+                </div>
+                <div className="lg:col-span-3">
+                    <Editor
+                        name="description"
+                        onChange={(value, editor) => {
+                            setValue("editor", value);
+                        }}
+                        editorLoaded={editorLoaded}
+                    />
+                    {/* <Button type="submit" className="bg-white">
                         Test Submit
-                    </Button>
+                    </Button> */}
                 </div>
             </form>
         </div>
