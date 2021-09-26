@@ -6,6 +6,8 @@
     "start": "next start"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^29.2.0",
+    "@ckeditor/ckeditor5-react": "^3.0.2",
     "@headlessui/react": "^1.4.1",
     "@hookform/resolvers": "^2.8.1",
     "next": "latest",
