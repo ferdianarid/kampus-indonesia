@@ -3,11 +3,8 @@ import React from "react";
 const Input = React.forwardRef(
     ({ label, containerProps, labelProps, errorMessage, ...props }, ref) => {
         return (
-            <div
-                className="flex flex-col mt-5 mb-7 relative"
-                {...containerProps}
-            >
-                <label className="text-xl mb-2" {...labelProps}>
+            <div className="flex flex-col mb-7 relative" {...containerProps}>
+                <label className="text-xl mb-2 text-primary" {...labelProps}>
                     {label}
                 </label>
                 <input
