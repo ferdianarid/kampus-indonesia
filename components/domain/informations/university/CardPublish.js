@@ -70,7 +70,12 @@ const Publish = ({ className, ...props }) => {
                         <img src="/icons/trash.svg" className="mr-2" />
                         <span className="underline">Move Trash</span>
                     </span>
-                    <MyButton className="px-6">Publish</MyButton>
+                    <MyButton
+                        type="submit"
+                        className="px-6"
+                    >
+                        Publish
+                    </MyButton>
                 </div>
             </FooterCard>
         </ContainerCard>
