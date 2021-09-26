@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 
-const Editor = ({ onChange, editorLoaded, name, value }) => {
+const Editor = ({ minHeight, onChange, editorLoaded, name, value }) => {
+    const defaultMinHeight = "200px";
     const editorRef = useRef();
     const { CKEditor, ClassicEditor } = editorRef.current || {};
 
@@ -19,9 +20,22 @@ const Editor = ({ onChange, editorLoaded, name, value }) => {
                     name={name}
                     editor={ClassicEditor}
                     data={value}
+                    onReady={(editor) => {
+                        editor.ui.view.editable.element.style.minHeight =
+                            minHeight || defaultMinHeight;
+                    }}
+                    onFocus={(event, editor) => {
+                        editor.ui.view.editable.element.style.minHeight =
+                            minHeight || defaultMinHeight;
+                    }}
+                    onBlur={(event, editor) => {
+                        editor.ui.view.editable.element.style.minHeight =
+                            minHeight || defaultMinHeight;
+                    }}
                     onChange={(event, editor) => {
+                        editor.ui.view.editable.element.style.minHeight =
+                            minHeight || defaultMinHeight;
                         const data = editor.getData();
-                        // console.log({ event, editor, data })
                         onChange(data);
                     }}
                 />
