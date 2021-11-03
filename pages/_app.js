@@ -1,8 +1,9 @@
 import "tailwindcss/tailwind.css";
 import "../styles/global.css";
 import Head from "next/head";
-import { Provider } from "react-redux";
 import store from "configs/redux/store";
+import Auth from "configs/route/Auth";
+import { Provider } from "react-redux";
 import { SessionProvider } from "next-auth/react";
 
 const MyApp = ({ Component, pageProps: { session, ...pageProps } }) => {
@@ -33,7 +34,14 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }) => {
                         ></link>
                         <link rel="icon" href="/favicon.ico" />
                     </Head>
-                    <Component {...pageProps} />
+
+                    {Component.auth ? (
+                        <Auth {...Component.auth}>
+                            <Component {...pageProps} />
+                        </Auth>
+                    ) : (
+                        <Component {...pageProps} />
+                    )}
                 </SessionProvider>
             </Provider>
         </>
