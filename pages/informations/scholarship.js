@@ -1,9 +1,16 @@
+import UserLayout from "@components/layouts/UserLayout";
 const scholarship = () => {
     return (
-        <div>
-            Enter
-        </div>
-    )
-}
+        <UserLayout>
+            <div className="flex items-center justify-center min-h-full min-w-full">
+                Coming Soon
+            </div>
+        </UserLayout>
+    );
+};
 
-export default scholarship
+scholarship.auth = {
+    role: "user",
+};
+
+export default scholarship;

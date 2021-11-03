@@ -1,9 +1,17 @@
+import UserLayout from "@components/layouts/UserLayout";
+
 const internship = () => {
     return (
-        <div>
-            Enter
-        </div>
-    )
-}
+        <UserLayout>
+            <div className="flex items-center justify-center min-h-full min-w-full">
+                Coming Soon
+            </div>
+        </UserLayout>
+    );
+};
 
-export default internship
+internship.auth = {
+    role: "user",
+};
+
+export default internship;
