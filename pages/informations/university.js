@@ -3,6 +3,7 @@ import UnivItem from "@components/UnivItem";
 import HeaderPagesInformation from "@components/HeaderPagesInformation";
 import MyCheckbox from "@components/MyCheckbox";
 import { useState, useEffect } from "react";
+import UserLayout from "@components/layouts/UserLayout";
 
 const university = () => {
     const [universities, setUniversities] = useState([]);
@@ -50,14 +51,14 @@ const university = () => {
     };
 
     return (
-        <>
+        <UserLayout>
             <Head>
                 <title>Informasi Kampus / Jurusan</title>
             </Head>
             <div>
                 <HeaderPagesInformation
                     title="Informasi Kampus / Jurusan"
-                    uploadPagePath="/informations/university"
+                    uploadPagePath="/informations/university/add"
                 />
                 <div className="bg-white rounded-md mt-8">
                     <div className=" border-gray-300">
@@ -96,8 +97,12 @@ const university = () => {
                     </div>
                 </div>
             </div>
-        </>
+        </UserLayout>
     );
+};
+
+university.auth = {
+    role: "user",
 };
 
 export default university;
