@@ -1,8 +1,14 @@
+import UserLayout from "@components/layouts/UserLayout";
+import { useSession, signIn, signOut } from "next-auth/react";
+
 const Home = () => {
+    const { data: session, status } = useSession();
+    console.log(session);
     return (
-        <div>
+        <UserLayout>
             <div>Dashboard</div>
-        </div>
+            <button onClick={() => signOut()}>Logout</button>
+        </UserLayout>
     );
 };
 
