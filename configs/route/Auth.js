@@ -1,7 +1,7 @@
 import React from "react";
 import { signIn, useSession } from "next-auth/react";
 
-export default Auth = ({ children, ...props }) => {
+const Auth = ({ children, ...props }) => {
     const { data: session, status } = useSession();
     const isUser = !!session?.user;
 
@@ -17,3 +17,5 @@ export default Auth = ({ children, ...props }) => {
 
     return null;
 };
+
+export default Auth;
