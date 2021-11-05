@@ -1,10 +1,11 @@
 {
-    "compilerOptions": {
-        "baseUrl": "./",
-        "paths": {
-            "@components/*": ["components/*"],
-            "@request/*": ["request/*"],
-            "@libs/*": ["libs/*"]
-        }
-    } 
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@components/*": ["components/*"],
+      "@request/*": ["request/*"],
+      "@libs/*": ["libs/*"],
+      "@public/*": ["public/*"]
+    }
+  }
 }
