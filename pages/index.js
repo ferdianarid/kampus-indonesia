@@ -1,4 +1,4 @@
-import UserLayout from "@components/layouts/UserLayout";
+import UserLayout from "@components/layouts/AdminLayout";
 import { signOut } from "next-auth/react";
 
 const Home = () => {

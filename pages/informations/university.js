@@ -3,7 +3,7 @@ import UnivItem from "@components/UnivItem";
 import HeaderPagesInformation from "@components/HeaderPagesInformation";
 import MyCheckbox from "@components/MyCheckbox";
 import { useState, useEffect } from "react";
-import UserLayout from "@components/layouts/UserLayout";
+import UserLayout from "@components/layouts/AdminLayout";
 
 const university = () => {
     const [universities, setUniversities] = useState([]);
