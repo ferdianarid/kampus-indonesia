@@ -5,7 +5,8 @@
       "@components/*": ["components/*"],
       "@request/*": ["request/*"],
       "@libs/*": ["libs/*"],
-      "@public/*": ["public/*"]
+      "@public/*": ["public/*"],
+      "@utils/*": ["utils/*"]
     }
   }
 }

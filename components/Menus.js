@@ -7,10 +7,10 @@ const Menus = () => {
     <div>
       <Menu href="/">Dashboard</Menu>
       <ContainerSubmenu text="Blog">
-        <Menu href="/blog/posts">Posts</Menu>
-        <Menu href="/blog/published">Terpublish</Menu>
-        <Menu href="/blog/draft">Draft</Menu>
-        <Menu href="/blog/trash">Sampah</Menu>
+        <Menu href="/blogs/posts">Posts</Menu>
+        <Menu href="/blogs/published">Terpublish</Menu>
+        <Menu href="/blogs/draft">Draft</Menu>
+        <Menu href="/blogs/trash">Sampah</Menu>
       </ContainerSubmenu>
       <ContainerSubmenu text="Informasi">
         <Menu href="/informations/university">Kampus / Jurusan</Menu>
