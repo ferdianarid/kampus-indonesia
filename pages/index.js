@@ -11,7 +11,7 @@ const Home = () => {
 };
 
 Home.auth = {
-    role: "user",
+    role: "admin",
 };
 
 export default Home;

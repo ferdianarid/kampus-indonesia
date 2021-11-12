@@ -7,8 +7,13 @@ export const handleCheckAll = ({ stateList, setStateCheckAll }) => {
   let isAll = false;
   // jika jumlah check tidak sama dgn panjang univ maka check semua
   if (checkCounter < stateList.length) isAll = true;
+  console.log(checkCounter);
 
   setStateCheckAll(isAll);
+  stateList.map((item) => {
+    item.isChecked = isAll;
+    return item;
+  });
 };
 
 export const handleChangeCheck = ({ id, stateList, setStateList }) => {
