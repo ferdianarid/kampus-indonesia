@@ -35,14 +35,14 @@ const Login = () => {
 
       if (resultSign.error) {
         return toast("Gagal login.", {
-          icon: "error",
+          type: "error",
         });
       }
 
       window.location.replace(resultSign.url);
     } catch (error) {
       toast("Terjadi kesalahan", {
-        icon: "error",
+        type: "error",
       });
     }
   };
@@ -58,7 +58,7 @@ const Login = () => {
               </h3>
               <small>
                 Belum punya akun ?
-                <Link href="/">
+                <Link href="/register">
                   <a className="text-[#2978E3] ml-2">
                     Klik disini untuk daftar
                   </a>
