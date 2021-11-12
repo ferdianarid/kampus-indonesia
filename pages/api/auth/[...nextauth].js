@@ -35,7 +35,6 @@ export default NextAuth({
 
           user.expires = expires;
           user.access_token = access_token;
-          user.role = "admin";
 
           if (user) {
             return user;
@@ -71,7 +70,6 @@ export default NextAuth({
     async jwt({ token, user, account, profile, isNewUser }) {
       if (user) {
         const { access_token, role, expires } = user;
-        console.log(user);
         token = {
           ...token,
           access_token,
