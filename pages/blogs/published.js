@@ -155,7 +155,11 @@ const Published = () => {
                       Edit
                     </button>
                     <button className="bg-gray-200 text-white py-1 px-1 rounded-full">
-                      <img src="/icons/more-horizontal.svg" width="24px" />
+                      <Image
+                        src="/icons/more-horizontal.svg"
+                        alt="Icon menu"
+                        width="24px"
+                      />
                     </button>
                   </div>
                 </div>

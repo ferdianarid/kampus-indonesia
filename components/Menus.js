@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 const Menus = () => {
   return (
@@ -39,9 +40,10 @@ const ContainerSubmenu = ({ text, children }) => {
         }`}
       >
         {text}
-        <img
+        <Image
           src="/icons/chevron-right.svg"
           width="5px"
+          alt="Icon right"
           className={`${isOpen && "rotate-90"}`}
         />
       </div>

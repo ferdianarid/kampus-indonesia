@@ -19,10 +19,7 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }) => {
               href="https://fonts.gstatic.com"
               crossOrigin
             />
-            <link
-              href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap"
-              rel="stylesheet"
-            ></link>
+         
             <link rel="icon" href="/favicon.ico" />
           </Head>
 
