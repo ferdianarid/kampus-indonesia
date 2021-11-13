@@ -26,7 +26,6 @@ const Auth = ({ authenticatedRedirect, role, children, ...props }) => {
             className="px-4 py-2 bg-primary rounded-md text-white"
             onClick={() => {
               signOut();
-              signIn();
             }}
           >
             Sign
