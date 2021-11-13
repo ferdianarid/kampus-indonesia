@@ -105,8 +105,12 @@ const Published = () => {
             </div>
 
             <div className="">
-              {error && "Error"}
-              {!data && (
+              {error && (
+                <div className="flex py-10 items-center justify-center">
+                  Upsss Terjadi Kesalahan
+                </div>
+              )}
+              {!data && !error && (
                 <>
                   <LoadingPlaceholder />
                   <hr />

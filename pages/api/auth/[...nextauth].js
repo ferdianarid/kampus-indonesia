@@ -21,8 +21,8 @@ export default NextAuth({
               },
             },
           } = await backendApi.post("/login", {
-            email: "jaytzu13@gmail.com",
-            password: "helloworld",
+            email,
+            password,
           });
 
           const {
