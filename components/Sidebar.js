@@ -3,7 +3,7 @@ import { signOut } from "next-auth/react";
 
 const Sidebar = () => {
     return (
-        <div className="w-[225px] grid grid-rows-[min-content,1fr,min-content] bg-primary">
+        <div className="min-w-[225px] grid grid-rows-[min-content,1fr,min-content] bg-primary">
             <div className="mt-3 p-5">
                 <h3 className="text-xl font-bold text-white">Dashboard</h3>
                 <span className="text-sm text-white">Role : Admin</span>
