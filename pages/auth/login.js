@@ -27,6 +27,10 @@ const Login = () => {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {
+      email: "jaytzu13@gmail.com",
+      password: "helloworld",
+    },
   });
 
   const submit = async (data) => {
