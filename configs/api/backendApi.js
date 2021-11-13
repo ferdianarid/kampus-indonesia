@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export default axios.create({
-    baseURL: "http://sandbox-api.kampusindonesia.co.id/api/v1/",
+  baseURL: process.env.BASE_API,
 });
