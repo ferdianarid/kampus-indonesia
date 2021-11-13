@@ -1,4 +1,8 @@
-export const handleCheckAll = ({ stateList, setStateCheckAll }) => {
+export const handleCheckAll = ({
+  setStateList,
+  stateList,
+  setStateCheckAll,
+}) => {
   const checkCounter = stateList.reduce((prev, curr) => {
     if (curr.isChecked) prev++;
     return prev;
@@ -7,24 +11,33 @@ export const handleCheckAll = ({ stateList, setStateCheckAll }) => {
   let isAll = false;
   // jika jumlah check tidak sama dgn panjang univ maka check semua
   if (checkCounter < stateList.length) isAll = true;
-  console.log(checkCounter);
 
-  setStateCheckAll(isAll);
-  stateList.map((item) => {
+  const newList = stateList.map((item) => {
     item.isChecked = isAll;
     return item;
   });
+  setStateList(newList);
+  setStateCheckAll(isAll);
 };
 
-export const handleChangeCheck = ({ id, stateList, setStateList }) => {
-  const updatedStateList = stateList.map((item) => {
+export const handleChangeCheck = ({
+  id,
+  setCheckAll,
+  stateList,
+  setStateList,
+}) => {
+  let isAll = true;
+  const updatedList = stateList.map((item) => {
     if (item.id === id) {
       item.isChecked = !item.isChecked;
-      return item;
     }
+
+    if (!item.isChecked) isAll = false;
 
     return item;
   });
+  console.log(isAll);
 
-  setStateList(updatedStateList);
+  setCheckAll(isAll);
+  setStateList(updatedList);
 };

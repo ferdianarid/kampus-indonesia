@@ -22,36 +22,41 @@ const Publish = ({ className, ...props }) => {
           <div>
             <ContainerItem>
               <Image
-                width="12"
+                height={16}
+                width={16}
                 src="/icons/key.svg"
                 alt="Icon key"
                 className="mr-3"
               />
-              <span>Status : Draft</span>
+              <span className="ml-2">Status : Draft</span>
               <Link href="/" className="underline text-blue-700 ml-2">
                 Edit
               </Link>
             </ContainerItem>
             <ContainerItem>
               <Image
-                width="14"
+                width={14}
+                height={14}
+                objectFit="contain"
                 src="/icons/eye.svg"
                 alt="Icon eye"
                 className="mr-3"
               />
-              <span>Visibility : Public</span>
+              <span className="ml-2">Visibility : Public</span>
               <Link href="/" className="underline text-blue-700 ml-2">
                 Edit
               </Link>
             </ContainerItem>
             <ContainerItem>
               <Image
-                width="14"
+                width={14}
+                height={14}
+                objectFit="contain"
                 src="/icons/calendar.svg"
                 alt="Icon calendar"
                 className="mr-3"
               />
-              <span>Publish : Immediately</span>
+              <span className="ml-2">Publish : Immediately</span>
               <Link href="/" className="underline text-blue-700 ml-2">
                 Edit
               </Link>
@@ -63,7 +68,14 @@ const Publish = ({ className, ...props }) => {
       <FooterCard>
         <div className="flex justify-between items-center px-5">
           <span className="flex items-center">
-            <Image src="/icons/trash.svg" alt="Icon trash" className="mr-2" />
+            <Image
+              width={14}
+              height={14}
+              objectFit="contain"
+              src="/icons/trash.svg"
+              alt="Icon trash"
+              className="mr-2"
+            />
             <span className="underline">Move Trash</span>
           </span>
           <MyButton className="px-6">Publish</MyButton>

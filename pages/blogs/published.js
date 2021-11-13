@@ -33,7 +33,6 @@ const Published = () => {
       }
       // one category
       else {
-        console.log(data);
         const blogsMapped = data.data.data.articles.data.map((item) => ({
           ...item,
           isChecked: false,
@@ -42,6 +41,10 @@ const Published = () => {
       }
     }
   }, [data, error, category]);
+
+  useEffect(() => {
+    console.log(blogs);
+  }, [blogs]);
 
   const handleChangeCategory = (e) => {
     const val = e.target.value;
@@ -53,6 +56,15 @@ const Published = () => {
 
     // all category
     setEndPoint(apiAllCat);
+  };
+
+  const handleCheck = (e) => {
+    handleChangeCheck({
+      id: parseInt(e.target.value),
+      stateList: blogs,
+      setStateList: setBlogs,
+      setCheckAll,
+    });
   };
 
   return (
@@ -70,10 +82,11 @@ const Published = () => {
                 name="checkall"
                 isChecked={isCheckAll}
                 onChange={() => {
-                  if (!data) return;
+                  if (!blogs.length) return;
 
                   handleCheckAll({
                     stateList: blogs,
+                    setStateList: setBlogs,
                     setStateCheckAll: setCheckAll,
                   });
                 }}
@@ -110,17 +123,10 @@ const Published = () => {
                   className="flex items-center py-4 border-b-2 last:border-b-0 border-gray-300"
                 >
                   <MyCheckbox
-                    name={item.id}
-                    isChecked={() => {
-                      item.isChecked;
-                    }}
-                    onChange={() => {
-                      handleChangeCheck({
-                        id: item.id,
-                        stateList: blogs,
-                        setStateList: setBlogs,
-                      });
-                    }}
+                    name={"univ"}
+                    value={item.id}
+                    isChecked={item.isChecked}
+                    onChange={handleCheck}
                   />
                   <Image
                     loading="lazy"
@@ -151,14 +157,15 @@ const Published = () => {
                   </div>
 
                   <div className="flex items-center">
-                    <button className="bg-primary text-white py-1 px-5 rounded-2xl mr-2">
+                    <button className="bg-primary text-white py-2 px-5 rounded-3xl mr-2">
                       Edit
                     </button>
-                    <button className="bg-gray-200 text-white py-1 px-1 rounded-full">
+                    <button className="w-[40px] h-[40px] flex items-center justify-center bg-gray-200 text-white py-1 px-1 rounded-full">
                       <Image
                         src="/icons/more-horizontal.svg"
                         alt="Icon menu"
-                        width="24px"
+                        width={"24px"}
+                        height={"24px"}
                       />
                     </button>
                   </div>

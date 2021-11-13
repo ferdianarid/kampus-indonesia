@@ -43,6 +43,7 @@ const ContainerSubmenu = ({ text, children }) => {
         <Image
           src="/icons/chevron-right.svg"
           width="5px"
+          height={"10px"}
           alt="Icon right"
           className={`${isOpen && "rotate-90"}`}
         />
