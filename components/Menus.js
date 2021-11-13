@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import isServer from "@utils/isServer";
@@ -24,11 +24,9 @@ const Menus = () => {
 };
 
 const ContainerSubmenu = ({ text, children }) => {
-  const [isOpen, setIsOpen] = React.useState(itsOpened);
-  if (isServer()) return null;
-  
   const containerUrl = window.location.pathname.split("/").at(1); // ['', 'informations', 'event']
   const itsOpened = containerUrl === "informations";
+  const [isOpen, setIsOpen] = React.useState(itsOpened);
 
   // active when submenu opened
   return (
@@ -54,8 +52,6 @@ const ContainerSubmenu = ({ text, children }) => {
 };
 
 const Menu = ({ href, children }) => {
-  if (isServer()) return null;
-
   // active when url is this page
   const itsPage = window.location.pathname === href;
   return (
