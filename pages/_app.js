@@ -8,7 +8,7 @@ import { SessionProvider } from "next-auth/react";
 import isServer from "@utils/isServer";
 
 const MyApp = ({ Component, pageProps: { session, ...pageProps } }) => {
-  if (isServer()) return null;
+  if (isServer()) return <></>;
   return (
     <>
       <Provider store={store}>

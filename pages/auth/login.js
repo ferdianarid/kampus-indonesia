@@ -10,6 +10,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Spinner from "@components/Spinner";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 const schema = yup
   .object({
@@ -20,6 +21,7 @@ const schema = yup
 
 const Login = () => {
   const [isFatching, setIsFatching] = useState(false);
+  const router = useRouter();
 
   const {
     register,
@@ -43,7 +45,7 @@ const Login = () => {
         redirect: false,
       });
 
-      if (!resultSign.error) return window.location.replace(resultSign.url);
+      if (!resultSign.error) return router.push(resultSign.url);
 
       toast("Gagal login.", {
         type: "error",
