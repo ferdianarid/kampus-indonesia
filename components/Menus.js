@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import Image from "next/image";
 
 const Menus = () => {
@@ -24,9 +23,7 @@ const Menus = () => {
 };
 
 const ContainerSubmenu = ({ text, children }) => {
-  const { pathname } = useRouter();
-
-  const containerUrl = pathname.split("/").at(1); // ['', 'informations', 'event']
+  const containerUrl = window.location.pathname.split("/").at(1); // ['', 'informations', 'event']
   const itsOpened = containerUrl === "informations";
   const [isOpen, setIsOpen] = React.useState(itsOpened);
 
@@ -54,10 +51,8 @@ const ContainerSubmenu = ({ text, children }) => {
 };
 
 const Menu = ({ href, children }) => {
-  const { pathname } = useRouter();
-
   // active when url is this page
-  const itsPage = pathname === href;
+  const itsPage = window.location.pathname === href;
   return (
     <Link href={href}>
       <a
