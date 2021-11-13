@@ -9,25 +9,51 @@ import backendApi from "configs/api/backendApi";
 import placeholder from "@public/placeholder.png";
 import { DateTime } from "luxon";
 
+const apiAllCat = "/articles?perpage=10";
+const apiOneCat = (slug) => `/categories/${slug}`;
+
 const Published = () => {
-  const { data, error } = useSWRImmutable(
-    "/articles?perpage=10",
-    backendApi.get
-  );
+  const [endPoint, setEndPoint] = useState("/articles?perpage=10");
+
+  const { data, error } = useSWRImmutable(endPoint, backendApi.get);
+
+  const [category, setCategory] = useState("");
   const [blogs, setBlogs] = useState([]);
   const [isCheckAll, setCheckAll] = useState(false);
 
   useEffect(() => {
     if (data) {
-      const blogsMapped = data.data.data.data.map((item) => ({
-        ...item,
-        isChecked: false,
-      }));
-      setBlogs(blogsMapped);
+      // all category
+      if (category === "") {
+        const blogsMapped = data.data.data.data.map((item) => ({
+          ...item,
+          isChecked: false,
+        }));
+        setBlogs(blogsMapped);
+      }
+      // one category
+      else {
+        console.log(data);
+        const blogsMapped = data.data.data.articles.data.map((item) => ({
+          ...item,
+          isChecked: false,
+        }));
+        setBlogs(blogsMapped);
+      }
     }
-  }, [data, error]);
+  }, [data, error, category]);
 
-  useEffect(() => {}, [blogs]);
+  const handleChangeCategory = (e) => {
+    const val = e.target.value;
+
+    setCategory(val);
+    setBlogs([]);
+    // one category
+    if (val !== "") return setEndPoint(apiOneCat(val));
+
+    // all category
+    setEndPoint(apiAllCat);
+  };
 
   return (
     <AdminLayout>
@@ -38,7 +64,7 @@ const Published = () => {
         />
         <div className="bg-white rounded-md mt-8">
           <div className="p-4 border-gray-300">
-            <div className="flex justify-between">
+            <div className="flex justify-between border-b-2 pb-5">
               <MyCheckbox
                 label="Select All"
                 name="checkall"
@@ -54,71 +80,86 @@ const Published = () => {
               />
               <div className="flex items-center">
                 <label className="mr-3">Filter By</label>
-                <CategoryBlog />
+                <CategoryBlog
+                  value={category}
+                  onChange={handleChangeCategory}
+                />
                 <input
                   className="bg-search border-2 border-gray-300 px-3 pl-8 py-1 rounded-md min-w-[190px]"
                   placeholder="Search"
                 />
               </div>
             </div>
-            <div className="mt-3">
+
+            <div className="">
               {error && "Error"}
-              {!data && "Loading"}
-              {blogs.length &&
-                blogs.map((item, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className="flex items-center py-4 border-t-2 border-b-2 last:border-b-0 border-gray-300"
-                    >
-                      <MyCheckbox
-                        name={item.id}
-                        isChecked={() => {
-                          item.isChecked;
-                        }}
-                        onChange={() => {
-                          handleChangeCheck({
-                            id: item.id,
-                            stateList: blogs,
-                            setStateList: setBlogs,
-                          });
-                        }}
-                      />
-                      <Image
-                        loading="lazy"
-                        src={placeholder}
-                        objectFit="cover"
-                        className="rounded-md"
-                        width={87}
-                        height={64}
-                        alt="Cover image"
-                      />
+              {!data && (
+                <>
+                  <LoadingPlaceholder />
+                  <hr />
+                  <LoadingPlaceholder />
+                  <hr />
+                  <LoadingPlaceholder />
+                  <hr />
+                  <LoadingPlaceholder />
+                </>
+              )}
+              {blogs.map((item, index) => (
+                <div
+                  key={index}
+                  className="flex items-center py-4 border-b-2 last:border-b-0 border-gray-300"
+                >
+                  <MyCheckbox
+                    name={item.id}
+                    isChecked={() => {
+                      item.isChecked;
+                    }}
+                    onChange={() => {
+                      handleChangeCheck({
+                        id: item.id,
+                        stateList: blogs,
+                        setStateList: setBlogs,
+                      });
+                    }}
+                  />
+                  <Image
+                    loading="lazy"
+                    src={placeholder}
+                    objectFit="cover"
+                    className="rounded-md"
+                    width={87}
+                    height={64}
+                    alt="Cover image"
+                  />
 
-                      <div className="ml-8 flex-grow">
-                        <h3 className="text-primary font-bold">{item.title}</h3>
-                        <div className="text-primary font-roboto text-sm font-light text-opacity-70">
-                          {item.categories
-                            .map((categorie) => categorie.name)
-                            .join(", ")}
-                        </div>
-                        <h6 className="text-xs font-roboto font-light mt-1">
-                          {DateTime.fromISO(item.created_at).toFormat(
-                            "dd MMMM yyyy"
-                          )}
-                        </h6>
-                      </div>
-
-                      <div className="flex items-center">
-                        <button className="bg-primary text-white py-1 px-5 rounded-2xl mr-2">
-                          Edit
-                        </button>
-                        <button className="bg-gray-200 text-white py-1 px-1 rounded-full">
-                          <img src="/icons/more-horizontal.svg" width="24px" />
-                        </button>
-                      </div>
+                  <div className="ml-8 flex-grow">
+                    <h3 className="text-primary font-bold">{item.title}</h3>
+                    <div className="text-primary font-roboto text-sm font-light text-opacity-70">
+                      {item.categories ? (
+                        item.categories
+                          .map((categorie) => categorie.name)
+                          .join(", ")
+                      ) : (
+                        <div>&nbsp;</div>
+                      )}
                     </div>
-                  );
-                })}
+                    <h6 className="text-xs font-roboto font-light mt-1">
+                      {DateTime.fromISO(item.created_at).toFormat(
+                        "dd MMMM yyyy"
+                      )}
+                    </h6>
+                  </div>
+
+                  <div className="flex items-center">
+                    <button className="bg-primary text-white py-1 px-5 rounded-2xl mr-2">
+                      Edit
+                    </button>
+                    <button className="bg-gray-200 text-white py-1 px-1 rounded-full">
+                      <img src="/icons/more-horizontal.svg" width="24px" />
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -127,7 +168,26 @@ const Published = () => {
   );
 };
 
-const CategoryBlog = ({ onChange, ...props }) => {
+const LoadingPlaceholder = () => (
+  <div className="animate-pulse rounded-md p-2 w-full mx-auto my-2">
+    <div className="flex justify-between items-center">
+      <div className="flex space-x-4 w-full">
+        <div className="bg-gray-300 rounded-md h-[64px] w-[87px] ml-8"></div>
+        <div className="flex-1 space-y-2 pl-4">
+          <div className="h-4 bg-gray-300 rounded w-1/4"></div>
+          <div className="h-4 bg-gray-300 rounded w-2/4"></div>
+          <div className="h-4 bg-gray-300 rounded w-2/5"></div>
+        </div>
+      </div>
+      <div className="flex">
+        <button className="bg-gray-300 w-16 rounded-2xl mr-2"></button>
+        <button className="bg-gray-300 w-8 py-4 px-1 rounded-full"></button>
+      </div>
+    </div>
+  </div>
+);
+
+const CategoryBlog = ({ value, onChange, ...props }) => {
   const [category, setCategory] = useState([]);
   const { data, error } = useSWRImmutable("/categories", backendApi.get);
 
@@ -139,6 +199,7 @@ const CategoryBlog = ({ onChange, ...props }) => {
 
   return (
     <select
+      value={value}
       onChange={onChange}
       className="border-2 border-gray-300 px-3 py-1 rounded-md min-w-[190px] mr-3"
       {...props}
@@ -149,7 +210,7 @@ const CategoryBlog = ({ onChange, ...props }) => {
         <>
           <option value="">All post</option>
           {category.map((item) => (
-            <option key={item.id} value={item.id}>
+            <option key={item.slug} value={item.id}>
               {item.name}
             </option>
           ))}
