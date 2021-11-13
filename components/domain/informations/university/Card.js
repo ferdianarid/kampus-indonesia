@@ -16,6 +16,9 @@ export const HeaderCard = ({ setOpen, title, isOpen }) => {
     >
       <div>{title}</div>
       <Image
+        width={9}
+        height={9}
+        objectFit="contain"
         src="/icons/up.svg"
         alt="Icon up"
         className={`${isOpen && "rotate-180"}`}

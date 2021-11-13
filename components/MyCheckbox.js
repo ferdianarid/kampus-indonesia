@@ -11,11 +11,11 @@ const MyCheckbox = ({ name, label, value, onChange, isChecked }) => {
       <label className="flex justify-start items-start">
         <div className="bg-white border-2 rounded border-gray-400 w-6 h-6 flex flex-shrink-0 justify-center items-center mr-2 focus-within:border-primary">
           <input
-            id="selectAll"
+            id={value}
             name={name}
-            // checked={isChecked}
             onChange={onChange}
             value={value}
+            checked={isChecked}
             type="checkbox"
             className="opacity-0 absolute"
           />
@@ -27,7 +27,7 @@ const MyCheckbox = ({ name, label, value, onChange, isChecked }) => {
           </svg>
         </div>
       </label>
-      <label htmlFor="selectAll" className="text-lg ml-2 select-none">
+      <label htmlFor={value} className="text-lg ml-2 select-none">
         {label}
       </label>
     </div>
