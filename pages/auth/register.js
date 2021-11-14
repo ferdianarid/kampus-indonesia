@@ -1,13 +1,13 @@
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import backendApi from "configs/api/backendApi";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import Spinner from "@components/Spinner";
 
 const schema = yup
   .object({
@@ -53,8 +53,8 @@ const Login = () => {
     term,
   }) => {
     try {
-      console.log(password_confirmation);
       setIsFatching(true);
+
       const res = await backendApi.post("/register", {
         name,
         email,
@@ -160,15 +160,7 @@ const Login = () => {
                 type="submit"
                 className="bg-primary px-8 py-2 text-white font-medium rounded-3xl h-10 w-[160px]"
               >
-                {isFatching ? (
-                  <div className="flex items-center justify-center space-x-2 animate-pulse">
-                    <div>
-                      <div className="w-6 h-6 border-[3.5px] border-white border-dotted rounded-full animate-spin"></div>
-                    </div>
-                  </div>
-                ) : (
-                  "BUAT AKUN"
-                )}
+                {isFatching ? <Spinner /> : "BUAT AKUN"}
               </button>
             </div>
           </div>

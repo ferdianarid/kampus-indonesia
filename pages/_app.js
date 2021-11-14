@@ -5,8 +5,10 @@ import store from "configs/redux/store";
 import Auth from "configs/route/Auth";
 import { Provider } from "react-redux";
 import { SessionProvider } from "next-auth/react";
+import isServer from "@utils/isServer";
 
 const MyApp = ({ Component, pageProps: { session, ...pageProps } }) => {
+  if (isServer()) return <></>;
   return (
     <>
       <Provider store={store}>
@@ -19,7 +21,7 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }) => {
               href="https://fonts.gstatic.com"
               crossOrigin
             />
-         
+
             <link rel="icon" href="/favicon.ico" />
           </Head>
 

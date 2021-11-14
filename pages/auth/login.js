@@ -8,6 +8,9 @@ import google from "@public/logos/google.png";
 import facebook from "@public/logos/facebook.png";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Spinner from "@components/Spinner";
+import { useState } from "react";
+import { useRouter } from "next/router";
 
 const schema = yup
   .object({
@@ -17,34 +20,43 @@ const schema = yup
   .required();
 
 const Login = () => {
+  const [isFatching, setIsFatching] = useState(false);
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {
+      email: "jaytzu13@gmail.com",
+      password: "helloworld",
+    },
   });
 
   const submit = async (data) => {
     try {
+      setIsFatching(true);
+
       const resultSign = await signIn("credentials", {
         email: data.email,
         password: data.password,
         redirect: false,
       });
 
-      if (resultSign.error) {
-        return toast("Gagal login.", {
-          type: "error",
-        });
-      }
+      if (!resultSign.error) return router.push(resultSign.url);
 
-      window.location.replace(resultSign.url);
+      toast("Gagal login.", {
+        type: "error",
+      });
     } catch (error) {
       toast("Terjadi kesalahan", {
         type: "error",
       });
     }
+
+    setIsFatching(false);
   };
 
   return (
@@ -122,10 +134,11 @@ const Login = () => {
             </div>
             <div className="flex place-content-center mt-5 mb-2">
               <button
+                disabled={isFatching}
                 type="submit"
                 className="bg-primary px-8 py-2 text-white font-medium rounded-3xl"
               >
-                Masuk
+                {isFatching ? <Spinner /> : "Masuk"}
               </button>
             </div>
             <ForgotPassword className={`md:hidden text-center mt-3`} />
