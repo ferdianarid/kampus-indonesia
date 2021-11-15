@@ -1,10 +1,10 @@
 import React from "react";
-import { ContainerCard, HeaderCard, BodyCard, FooterCard } from "../../Card";
+import { ContainerCard, HeaderCard, BodyCard, FooterCard } from "./Card";
 import MyButton from "@components/inputs/Button";
 import Image from "next/image";
 import Link from "next/link";
 
-const Publish = ({ onClickDraft, className, ...props }) => {
+const Publish = ({ clickDraft, className, ...props }) => {
   const [isOpen, setIsOpen] = React.useState(true);
   return (
     <ContainerCard>
@@ -16,7 +16,7 @@ const Publish = ({ onClickDraft, className, ...props }) => {
       {isOpen && (
         <BodyCard>
           <div className="flex justify-between mb-3">
-            <Button onClick={onClickDraft} type="button">
+            <Button onClick={clickDraft} name="draft" type="button">
               Save Draft
             </Button>
             <Button type="button">Preview</Button>
@@ -59,8 +59,8 @@ const Publish = ({ onClickDraft, className, ...props }) => {
                 className="mr-3"
               />
               <span className="ml-2">Publish : Immediately</span>
-              <Link href="/" className="underline text-blue-700 ml-2">
-                Edit
+              <Link href="/">
+                <a className="underline text-blue-700 ml-2">Edit</a>
               </Link>
             </ContainerItem>
           </div>
