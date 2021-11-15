@@ -72,7 +72,7 @@ const Published = () => {
       <div className="mx-10">
         <HeaderPagesInformation
           title="Terpublish"
-          uploadPagePath="/informations/university/add"
+          uploadPagePath="/blogs/add"
         />
         <div className="bg-white rounded-md mt-8">
           <div className="p-4 border-gray-300">
@@ -134,7 +134,7 @@ const Published = () => {
                   />
                   <Image
                     loading="lazy"
-                    src={placeholder}
+                    src={item.cover}
                     objectFit="cover"
                     className="rounded-md"
                     width={87}
