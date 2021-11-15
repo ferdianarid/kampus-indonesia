@@ -1,17 +1,11 @@
-import UserLayout from "@components/layouts/AdminLayout";
-import { signOut } from "next-auth/react";
+import AdminLayout from "@components/layouts/AdminLayout";
 
 const Home = () => {
-    return (
-        <UserLayout>
-            <div>Dashboard</div>
-            <button onClick={() => signOut()}>Logout</button>
-        </UserLayout>
-    );
+  return <AdminLayout></AdminLayout>;
 };
 
 Home.auth = {
-    role: "admin",
+  role: "admin",
 };
 
 export default Home;
