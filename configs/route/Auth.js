@@ -7,7 +7,7 @@ const Auth = ({ authenticatedRedirect, role, children, ...props }) => {
 
   React.useEffect(() => {
     // When rendering client side don't display anything until loading is complete
-    if (status === "loading") return <></>;
+    if (status === "loading") return null;
     if (!isUser & !authenticatedRedirect) signIn();
   }, [isUser, status, authenticatedRedirect]);
 
@@ -15,7 +15,8 @@ const Auth = ({ authenticatedRedirect, role, children, ...props }) => {
   if (isUser) {
     // Redirect ke authenticatedRedirect
     if (!!authenticatedRedirect) {
-      return window.location.replace(authenticatedRedirect);
+      window.location.replace(authenticatedRedirect);
+      return null;
     }
 
     if (role && role !== session.user.role) {
@@ -39,7 +40,7 @@ const Auth = ({ authenticatedRedirect, role, children, ...props }) => {
     return children;
   }
 
-  return <></>;
+  return null;
 };
 
 export default Auth;

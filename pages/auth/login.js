@@ -45,7 +45,7 @@ const Login = () => {
         redirect: false,
       });
 
-      if (!resultSign.error) return router.push(resultSign.url);
+      if (!resultSign.error) return;
 
       toast("Gagal login.", {
         type: "error",
