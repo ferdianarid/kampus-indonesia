@@ -6,17 +6,20 @@ import { handleCheckAll, handleChangeCheck } from "@utils/checkboxHendler";
 import useSWRImmutable from "swr/immutable";
 import Image from "next/image";
 import backendApi from "configs/api/backendApi";
-import placeholder from "@public/placeholder.png";
 import { DateTime } from "luxon";
+import ilustrationEmptyBlog from "@public/ilustration-empty-blog.svg";
+import Link from "next/link";
+import ButtonLg from "@components/ButtonLg";
+import LoadingPlaceholder from "@components/domain/blogs/LoadingPlaceholder";
+import SelectCategory from "@components/domain/blogs/SelectCategory";
 
 const apiAllCat = "/articles?perpage=10";
 const apiOneCat = (slug) => `/categories/${slug}`;
 
 const Published = () => {
   const [endPoint, setEndPoint] = useState("/articles?perpage=10");
-
   const { data, error } = useSWRImmutable(endPoint, backendApi.get);
-
+  
   const [category, setCategory] = useState("");
   const [blogs, setBlogs] = useState([]);
   const [isCheckAll, setCheckAll] = useState(false);
@@ -31,6 +34,7 @@ const Published = () => {
         }));
         setBlogs(blogsMapped);
       }
+
       // one category
       else {
         const blogsMapped = data.data.data.articles.data.map((item) => ({
@@ -82,6 +86,7 @@ const Published = () => {
                 name="checkall"
                 isChecked={isCheckAll}
                 onChange={() => {
+                  // disable change
                   if (!blogs.length) return;
 
                   handleCheckAll({
@@ -93,7 +98,7 @@ const Published = () => {
               />
               <div className="flex items-center">
                 <label className="mr-3">Filter By</label>
-                <CategoryBlog
+                <SelectCategory
                   value={category}
                   onChange={handleChangeCategory}
                 />
@@ -175,63 +180,29 @@ const Published = () => {
                   </div>
                 </div>
               ))}
+
+              {data && !data.length && !error && (
+                <div className="flex items-center flex-col py-10">
+                  <div className="mb-4">
+                    <Image
+                      src={ilustrationEmptyBlog}
+                      alt="Ilustration Empty Blog"
+                    />
+                  </div>
+                  <h3 className="text-primary">Belum ada Draft</h3>
+                  <p className="text-sm text-primary opacity-80">
+                    Setiap postingan bagus dimulai dengan satu kata.
+                  </p>
+                  <Link href={"/blogs/add"} passHref>
+                    <ButtonLg className="mt-4">Publish</ButtonLg>
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
     </AdminLayout>
-  );
-};
-
-const LoadingPlaceholder = () => (
-  <div className="animate-pulse rounded-md p-2 w-full mx-auto my-2">
-    <div className="flex justify-between items-center">
-      <div className="flex space-x-4 w-full">
-        <div className="bg-gray-300 rounded-md h-[64px] w-[87px] ml-8"></div>
-        <div className="flex-1 space-y-2 pl-4">
-          <div className="h-4 bg-gray-300 rounded w-1/4"></div>
-          <div className="h-4 bg-gray-300 rounded w-2/4"></div>
-          <div className="h-4 bg-gray-300 rounded w-2/5"></div>
-        </div>
-      </div>
-      <div className="flex">
-        <button className="bg-gray-300 w-16 rounded-2xl mr-2"></button>
-        <button className="bg-gray-300 w-8 py-4 px-1 rounded-full"></button>
-      </div>
-    </div>
-  </div>
-);
-
-const CategoryBlog = ({ value, onChange, ...props }) => {
-  const [category, setCategory] = useState([]);
-  const { data, error } = useSWRImmutable("/categories", backendApi.get);
-
-  useEffect(() => {
-    if (data) {
-      setCategory(data.data.data);
-    }
-  }, [data]);
-
-  return (
-    <select
-      value={value}
-      onChange={onChange}
-      className="border-2 border-gray-300 px-3 py-1 rounded-md min-w-[190px] mr-3"
-      {...props}
-    >
-      {error && <option>Error</option>}
-      {!data && <option value="">All post</option>}
-      {data && (
-        <>
-          <option value="">All post</option>
-          {category.map((item) => (
-            <option key={item.slug} value={item.id}>
-              {item.name}
-            </option>
-          ))}
-        </>
-      )}
-    </select>
   );
 };
 
