@@ -7,7 +7,7 @@ import schema from "@libs/yum/schema/universityCreate";
 import HeaderPageAdd from "@components/domain/informations/HeaderPageAdd";
 import File from "@components/inputs/File";
 import CardPublish from "@components/domain/CardPublish";
-import CardCategory from "@components/domain/informations/university/CardCategory";
+import CardCategory from "@components/domain/blogs/CardCategory";
 import AdminLayout from "@components/layouts/AdminLayout";
 import Editor from "@components/inputs/TextEditor";
 import { commonErrorHandler, getFirstErrorFromArray } from "@utils/index";
@@ -125,6 +125,10 @@ const AddUniversity = () => {
       <ToastContainer />
     </>
   );
+};
+
+AddUniversity.auth = {
+  role: "admin",
 };
 
 export default AddUniversity;
