@@ -1,7 +1,7 @@
 import backendApi from "configs/api/backendApi";
 import React, { useState, useEffect } from "react";
 import useSWRImmutable from "swr/immutable";
-import { ContainerCard, HeaderCard, BodyCard } from "./Card";
+import { ContainerCard, HeaderCard, BodyCard } from "../Card";
 
 const CardCategory = () => {
   const { data, error } = useSWRImmutable("/categories", backendApi.get);
@@ -32,13 +32,13 @@ const CardCategory = () => {
             >
               All Categories
             </button>
-            <button
+            {/* <button
               type="button"
               className={`px-4 py-2 ${activePage === 1 && "bg-[#F5F5F5]"}`}
               onClick={() => setActivePage(1)}
             >
               Most Used
-            </button>
+            </button> */}
           </div>
           <div className="bg-[#F5F5F5]">
             <div className={`px-4 py-3 ${activePage !== 0 && "hidden"}`}>
