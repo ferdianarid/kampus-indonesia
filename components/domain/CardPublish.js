@@ -16,10 +16,10 @@ const Publish = ({ clickDraft, className, ...props }) => {
       {isOpen && (
         <BodyCard>
           <div className="flex justify-between mb-3">
-            <Button onClick={clickDraft} name="draft" type="button">
+            {/* <Button onClick={clickDraft} name="draft" type="button">
               Save Draft
-            </Button>
-            <Button type="button">Preview</Button>
+            </Button> */}
+            {/* <Button type="button">Preview</Button> */}
           </div>
           <div>
             <ContainerItem>
@@ -80,7 +80,9 @@ const Publish = ({ clickDraft, className, ...props }) => {
             />
             <span className="underline">Move Trash</span>
           </span>
-          <MyButton className="px-6">Publish</MyButton>
+          <MyButton onClick={clickDraft} className="px-6">
+            Save
+          </MyButton>
         </div>
       </FooterCard>
     </ContainerCard>
