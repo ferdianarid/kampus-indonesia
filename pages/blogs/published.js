@@ -12,54 +12,93 @@ import Link from "next/link";
 import ButtonLg from "@components/ButtonLg";
 import LoadingPlaceholder from "@components/domain/blogs/LoadingPlaceholder";
 import SelectCategory from "@components/domain/blogs/SelectCategory";
+import { useSession } from "next-auth/react";
 
-const apiAllCat = "/articles?perpage=10";
-const apiOneCat = (slug) => `/categories/${slug}`;
+const apiAllCat = ({ activePage }) => `/panel/articles?page=${activePage}`;
+const apiOneCat = ({ activePage, idCategory }) =>
+  `panel/articles/categories/all/${idCategory}?page=${activePage}`;
 
 const Published = () => {
-  const [endPoint, setEndPoint] = useState("/articles?perpage=10");
-  const { data, error } = useSWRImmutable(endPoint, backendApi.get);
-  
+  const { data: session } = useSession();
+
+  const [page, setPage] = useState({
+    active: 1,
+    last: 1,
+    from: 1,
+  });
+
+  const [endPoint, setEndPoint] = useState(apiAllCat({ activePage: page }));
+
   const [category, setCategory] = useState("");
   const [blogs, setBlogs] = useState([]);
   const [isCheckAll, setCheckAll] = useState(false);
+  const { data, error } = useSWRImmutable(
+    [endPoint, session, category],
+    (endPoint, session, category) => {
+      if (category === "") {
+        return backendApi
+          .get(endPoint, {
+            headers: {
+              Authorization: "Bearer " + session.access_token,
+            },
+          })
+          .then((res) => res.data);
+      } else {
+        return backendApi
+          .post(endPoint, [], {
+            headers: {
+              Authorization: "Bearer " + session.access_token,
+            },
+          })
+          .then((res) => res.data);
+      }
+    }
+  );
 
   useEffect(() => {
     if (data) {
       // all category
       if (category === "") {
-        const blogsMapped = data.data.data.data.map((item) => ({
+        const blogsMapped = data.data.data.map((item) => ({
           ...item,
           isChecked: false,
         }));
+
         setBlogs(blogsMapped);
       }
 
       // one category
       else {
-        const blogsMapped = data.data.data.articles.data.map((item) => ({
+        const blogsMapped = data.data.articles.data.map((item) => ({
           ...item,
           isChecked: false,
         }));
+
         setBlogs(blogsMapped);
       }
+
+      setPage({
+        active: data.data.current_page,
+        last: data.data.last_page,
+        from: data.data.from,
+      });
     }
   }, [data, error, category]);
 
   useEffect(() => {
-    console.log(blogs);
-  }, [blogs]);
+    setPage({ active: 1, from: 1, last: 1 });
+  }, [category]);
 
   const handleChangeCategory = (e) => {
-    const val = e.target.value;
+    const idCategory = e.target.value;
 
-    setCategory(val);
-    setBlogs([]);
+    setCategory(idCategory);
+
     // one category
-    if (val !== "") return setEndPoint(apiOneCat(val));
-
+    if (idCategory !== "")
+      return setEndPoint(apiOneCat({ idCategory, activePage: page.active }));
     // all category
-    setEndPoint(apiAllCat);
+    else setEndPoint(apiAllCat({ activePage: page.active }));
   };
 
   const handleCheck = (e) => {
@@ -73,7 +112,7 @@ const Published = () => {
 
   return (
     <AdminLayout>
-      <div className="mx-10">
+      <div className="">
         <HeaderPagesInformation
           title="Terpublish"
           uploadPagePath="/blogs/add"
@@ -124,6 +163,9 @@ const Published = () => {
                   <LoadingPlaceholder />
                   <hr />
                   <LoadingPlaceholder />
+                  <hr />
+                  <LoadingPlaceholder />
+                  <hr />
                 </>
               )}
               {blogs.map((item, index) => (
@@ -181,7 +223,7 @@ const Published = () => {
                 </div>
               ))}
 
-              {data && !data.length && !error && (
+              {!blogs.length && data && !error && (
                 <div className="flex items-center flex-col py-10">
                   <div className="mb-4">
                     <Image
@@ -198,11 +240,113 @@ const Published = () => {
                   </Link>
                 </div>
               )}
+
+              <Pagination
+                activePage={page.active}
+                lastPage={page.last}
+                onClickBack={() => {
+                  setPage({
+                    ...page,
+                    active: page.active - 1,
+                  });
+                }}
+                onClick={() => {}}
+                onClickNext={() => {
+                  setPage({
+                    ...page,
+                    active: page.active + 1,
+                  });
+                }}
+              />
             </div>
           </div>
         </div>
       </div>
     </AdminLayout>
+  );
+};
+
+const PageNumber = ({ isActive, children }) => {
+  return (
+    <div
+      className={`w-8 md:flex justify-center items-center hidden cursor-pointer leading-5 transition duration-150 ease-in rounded-full ${
+        isActive ? "bg-primary text-white" : ""
+      }`}
+    >
+      {children}
+    </div>
+  );
+};
+
+const Pagination = ({
+  activePage,
+  lastPage,
+  onClickBack,
+  onClick,
+  onClickNext,
+}) => {
+  return (
+    <div className="flex flex-col items-center my-12">
+      <style jsx>{`
+        .circle {
+          @apply h-8 w-8 flex justify-center items-center rounded-full bg-gray-200 cursor-pointer;
+        }
+      `}</style>
+
+      <div className="flex text-gray-700">
+        <div
+          className={`mr-1 circle ${activePage === 1 ? "opacity-20" : ""}`}
+          onClick={() => {
+            if (activePage === 1) return;
+            onClickBack();
+          }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="100%"
+            height="100%"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="feather feather-chevron-left w-4 h-4"
+          >
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </div>
+        <div className="flex h-8 font-medium rounded-full bg-gray-200">
+          <PageNumber onClick={onClick} isActive={true}>
+            {activePage}
+          </PageNumber>
+        </div>
+        <div
+          className={`ml-1 circle ${
+            activePage === lastPage ? "opacity-20" : ""
+          }`}
+          onClick={() => {
+            if (activePage === lastPage) return;
+            onClickNext();
+          }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="100%"
+            height="100%"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="feather feather-chevron-right w-4 h-4"
+          >
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
+      </div>
+    </div>
   );
 };
 
