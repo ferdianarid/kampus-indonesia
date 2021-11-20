@@ -6,7 +6,7 @@ const Sidebar = () => {
   const [isOpen, setIsopen] = useState(false);
 
   return (
-    <div className="w-full lg:h-full bg-primary relative z-50">
+    <div className="w-full h-full bg-primary relative z-50">
       <div
         className={`${
           !isOpen && "-top-full"
