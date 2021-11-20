@@ -208,9 +208,11 @@ const Published = () => {
                   </div>
 
                   <div className="flex items-center">
-                    <button className="bg-primary text-white py-2 px-5 rounded-3xl mr-2">
-                      Edit
-                    </button>
+                    <Link href={`/blogs/edit/${item.id}`}>
+                      <a className="bg-primary text-white py-2 px-5 rounded-3xl mr-2">
+                        Edit
+                      </a>
+                    </Link>
                     <button className="w-[40px] h-[40px] flex items-center justify-center bg-gray-200 text-white py-1 px-1 rounded-full">
                       <Image
                         src="/icons/more-horizontal.svg"
