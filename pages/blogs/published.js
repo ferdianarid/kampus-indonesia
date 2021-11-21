@@ -15,26 +15,57 @@ import SelectCategory from "@components/domain/blogs/SelectCategory";
 import { useSession } from "next-auth/react";
 
 const apiAllCat = ({ activePage }) => `/panel/articles?page=${activePage}`;
+const apiSearch = ({ activePage }) =>
+  `/panel/articles/search?page=${activePage}`;
 const apiOneCat = ({ activePage, idCategory }) =>
   `panel/articles/categories/all/${idCategory}?page=${activePage}`;
 
 const Published = () => {
   const { data: session } = useSession();
-
   const [page, setPage] = useState({
     active: 1,
     last: 1,
     from: 1,
   });
 
-  const [endPoint, setEndPoint] = useState(apiAllCat({ activePage: page }));
-
+  const [endPoint, setEndPoint] = useState("");
   const [category, setCategory] = useState("");
+  const [search, setSearch] = useState("");
   const [blogs, setBlogs] = useState([]);
   const [isCheckAll, setCheckAll] = useState(false);
+
+  // handle change api
+  useEffect(() => {
+    if (search !== "") {
+      setCategory("");
+      setEndPoint(`/panel/articles/search?page=${page.active}`);
+    } else if (category !== "") {
+      setEndPoint(
+        `/panel/articles/categories/all/${category}?page=${page.active}`
+      );
+    } else {
+      setEndPoint(`/panel/articles?page=${page.active}`);
+    }
+  }, [search, page, endPoint, category]);
+
   const { data, error } = useSWRImmutable(
-    [endPoint, session, category],
-    (endPoint, session, category) => {
+    [endPoint, session, category, search],
+    (endPoint, session, category, search) => {
+      if (search !== "") {
+        return backendApi
+          .post(
+            endPoint,
+            {
+              search: search,
+            },
+            {
+              headers: {
+                Authorization: "Bearer " + session.access_token,
+              },
+            }
+          )
+          .then((res) => res.data);
+      }
       if (category === "") {
         return backendApi
           .get(endPoint, {
@@ -57,9 +88,25 @@ const Published = () => {
 
   useEffect(() => {
     if (data) {
+      // search
+      if (search !== "") {
+        // reset all
+        setCategory("");
+
+        if (data.data.data) {
+          const blogsMapped = data.data.data.map((item) => ({
+            ...item,
+            isChecked: false,
+          }));
+          setBlogs(blogsMapped);
+        } else {
+          setBlogs([]);
+        }
+      }
+
       // all category
-      if (category === "") {
-        const blogsMapped = data.data.data.map((item) => ({
+      else if (category !== "") {
+        const blogsMapped = data.data.articles.data.map((item) => ({
           ...item,
           isChecked: false,
         }));
@@ -69,7 +116,7 @@ const Published = () => {
 
       // one category
       else {
-        const blogsMapped = data.data.articles.data.map((item) => ({
+        const blogsMapped = data.data.data.map((item) => ({
           ...item,
           isChecked: false,
         }));
@@ -82,23 +129,17 @@ const Published = () => {
         last: data.data.last_page,
         from: data.data.from,
       });
+    } else {
+      setBlogs([]);
     }
-  }, [data, error, category]);
+  }, [data, error, category, search]);
 
-  useEffect(() => {
-    setPage({ active: 1, from: 1, last: 1 });
-  }, [category]);
+  useEffect(() => {}, [page]);
 
   const handleChangeCategory = (e) => {
     const idCategory = e.target.value;
 
     setCategory(idCategory);
-
-    // one category
-    if (idCategory !== "")
-      return setEndPoint(apiOneCat({ idCategory, activePage: page.active }));
-    // all category
-    else setEndPoint(apiAllCat({ activePage: page.active }));
   };
 
   const handleCheck = (e) => {
@@ -141,10 +182,24 @@ const Published = () => {
                   value={category}
                   onChange={handleChangeCategory}
                 />
-                <input
-                  className="bg-search border-2 border-gray-300 px-3 pl-8 py-1 rounded-md min-w-[190px]"
-                  placeholder="Search"
-                />
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    setSearch(e.target.elements.search.value);
+                    // reset active page
+                    setPage({
+                      active: 1,
+                      from: 1,
+                      last: 1,
+                    });
+                  }}
+                >
+                  <input
+                    name="search"
+                    className="bg-search border-2 border-gray-300 px-3 pl-8 py-1 rounded-md min-w-[190px]"
+                    placeholder="Search"
+                  />
+                </form>
               </div>
             </div>
 
