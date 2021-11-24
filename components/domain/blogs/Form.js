@@ -1,7 +1,7 @@
 import * as yup from "yup";
 import React from "react";
 import Input from "@components/inputs/Input";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import File from "@components/inputs/File";
 import CardPublish from "@components/domain/CardPublish";
@@ -13,58 +13,65 @@ import { toast } from "react-toastify";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import placeholderBlog from "@public/placeholder-blog.png";
+import { useState } from "react";
 
-const Form = () => {
+const Form = ({ id, title, cover, content, categories, isPublised }) => {
   const { data: session } = useSession();
+  const [isFetching, setIsFetching] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    control,
   } = useForm({
     mode: "onSubmit",
+    defaultValues: {
+      test: [],
+      title: title,
+      content: content,
+    },
     resolver: yupResolver(
       yup.object({
-        blogTitle: yup.string().required().min(5).label("Judul Artikel"),
+        title: yup.string().required().min(5).label("Judul Artikel"),
       })
     ),
   });
 
   const handleClickDraft = async (data) => {
     try {
-      // get selected categories
-      const categories = data.categories
-        .map((item, index) => ({
-          id: index,
-          value: item.value,
-        }))
-        .filter((item) => !!item.value);
-
       const form = new FormData();
-
-      form.append("title", data.blogTitle);
-      form.append("cover", data.image[0]);
-      form.append("content", data.blogContent);
+      form.append("title", data.title);
+      if (!!data.image[0]) form.append("cover", data.image[0]);
+      form.append("content", data.content);
 
       // add categories
-      categories?.map((item) => {
-        form.append("category[]", item.id);
+      data.category.forEach((item, index) => {
+        if (!!item) form.append("category[]", index);
       });
 
-      const res = await backendApi.post("/panel/articles/store", form, {
+      let endPoint = "";
+      if (!!id) endPoint = `/panel/articles/update/${id}`;
+      else endPoint = "/panel/articles/store";
+
+      setIsFetching(true);
+      await backendApi.post(endPoint, form, {
         headers: {
           Authorization: "Bearer " + session.access_token,
           "Content-type": "multipart/form-data",
         },
       });
 
-      return toast("Yeyyy aksi berhasil", {
+      toast("Yeyyy aksi berhasil", {
         type: "success",
       });
     } catch (error) {
       commonErrorHandler(error);
     }
+
+    setIsFetching(false);
   };
+
   return (
     <form
       onSubmit={handleSubmit(handleClickDraft)}
@@ -72,10 +79,11 @@ const Form = () => {
     >
       <div className="col-span-1 lg:col-span-2 w-full relative h-[300px]">
         <Image
-          src={placeholderBlog}
-          alt="Placeholder Blog"
+          src={cover}
+          alt="Cover Article"
           objectFit="cover"
           layout="fill"
+          placeholder={placeholderBlog}
         />
       </div>
 
@@ -83,9 +91,9 @@ const Form = () => {
         <div className="col-span-2 lg:col-span-1">
           <Input
             label="Judul Artikel"
-            {...register("blogTitle")}
-            {...(errors.blogTitle?.message && {
-              errorMessage: errors.blogTitle?.message,
+            {...register("title")}
+            {...(errors.title?.message && {
+              errorMessage: errors.title?.message,
             })}
           />
         </div>
@@ -98,15 +106,26 @@ const Form = () => {
         </div>
 
         <div className="col-span-2">
-          <Editor {...register("blogContent")} />
+          <Controller
+            name="content"
+            control={control}
+            render={(field) => {
+              return <Editor {...field.field} />;
+            }}
+          />
         </div>
       </div>
       <div className="flex flex-col">
         <div className="order-2 lg:order-1">
-          <CardPublish clickDraft={handleSubmit(handleClickDraft)} />
+          <CardPublish
+            id={id}
+            isPublised={isPublised}
+            isFetching={isFetching}
+            clickDraft={handleSubmit(handleClickDraft)}
+          />
         </div>
         <div className="order-1 lg:order-1">
-          <CardCategory register={register} />
+          <CardCategory control={control} defaultCategories={categories} />
         </div>
       </div>
     </form>
