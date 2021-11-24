@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useRef } from "react";
 import { ContainerCard, HeaderCard, BodyCard, FooterCard } from "./Card";
 import MyButton from "@components/inputs/Button";
 import Image from "next/image";
-import Link from "next/link";
+import Spinner from "@components/Spinner";
+import backendApi from "configs/api/backendApi";
+import { useSession } from "next-auth/react";
+import { commonErrorHandler } from "@utils/index";
+import { useState } from "react";
 
-const Publish = ({ clickDraft, className, ...props }) => {
+const Publish = ({
+  id,
+  isPublised,
+  isFetching,
+  clickDraft,
+  className,
+  ...props
+}) => {
   const [isOpen, setIsOpen] = React.useState(true);
   return (
     <ContainerCard>
@@ -15,53 +26,9 @@ const Publish = ({ clickDraft, className, ...props }) => {
       />
       {isOpen && (
         <BodyCard>
-          <div className="flex justify-between mb-3">
-            {/* <Button onClick={clickDraft} name="draft" type="button">
-              Save Draft
-            </Button> */}
-            {/* <Button type="button">Preview</Button> */}
-          </div>
           <div>
             <ContainerItem>
-              <Image
-                height={16}
-                width={16}
-                src="/icons/key.svg"
-                alt="Icon key"
-                className="mr-3"
-              />
-              <span className="ml-2">Status : Draft</span>
-              <Link href="/">
-                <a className="underline text-blue-700 ml-2">Edit</a>
-              </Link>
-            </ContainerItem>
-            <ContainerItem>
-              <Image
-                width={14}
-                height={14}
-                objectFit="contain"
-                src="/icons/eye.svg"
-                alt="Icon eye"
-                className="mr-3"
-              />
-              <span className="ml-2">Visibility : Public</span>
-              <Link href="/">
-                <a className="underline text-blue-700 ml-2">Edit</a>
-              </Link>
-            </ContainerItem>
-            <ContainerItem>
-              <Image
-                width={14}
-                height={14}
-                objectFit="contain"
-                src="/icons/calendar.svg"
-                alt="Icon calendar"
-                className="mr-3"
-              />
-              <span className="ml-2">Publish : Immediately</span>
-              <Link href="/">
-                <a className="underline text-blue-700 ml-2">Edit</a>
-              </Link>
+              <Switch id={id} isPublised={isPublised} className={`ml-4`} />
             </ContainerItem>
           </div>
         </BodyCard>
@@ -81,7 +48,7 @@ const Publish = ({ clickDraft, className, ...props }) => {
             <span className="underline">Move Trash</span>
           </span>
           <MyButton onClick={clickDraft} className="px-6">
-            Save
+            {isFetching ? <Spinner /> : "Save"}
           </MyButton>
         </div>
       </FooterCard>
@@ -98,6 +65,74 @@ export const Button = ({ children, ...props }) => {
     <button className="px-2 py-1 border bg-[#F7F7F7]" {...props}>
       {children}
     </button>
+  );
+};
+
+const Switch = ({ id, isPublised, className }) => {
+  const [isChecked, setIsChecked] = useState(isPublised);
+  const { data: session } = useSession();
+
+  const handleChange = async (e) => {
+    const checked = e.target.checked;
+
+    try {
+      let endPoint = "";
+      if (checked) {
+        endPoint = `/panel/articles/publish/${id}`;
+      } else {
+        endPoint = `/panel/articles/drafted/${id}`;
+      }
+
+      setIsChecked(checked);
+      await backendApi
+        .post(
+          endPoint,
+          {},
+          {
+            headers: {
+              Authorization: "Bearer " + session.access_token,
+            },
+          }
+        )
+        .then((res) => res.data);
+    } catch (error) {
+      setIsChecked(!checked);
+      commonErrorHandler(error);
+    }
+  };
+  return (
+    <div className={`${className}`}>
+      <style jsx>
+        {`
+          .toggle-checkbox:checked {
+            @apply right-0 border-primary;
+          }
+          .toggle-checkbox:checked + .toggle-label {
+            @apply bg-primary;
+          }
+        `}
+      </style>
+      <div className="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+        <input
+          onChange={handleChange}
+          checked={isChecked}
+          type="checkbox"
+          name="toggle"
+          id="toggle"
+          className="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
+        />
+        <label
+          htmlFor="toggle"
+          className="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"
+        ></label>
+      </div>
+      <label
+        htmlFor="toggle"
+        className="text-gray-700 select-none cursor-pointer"
+      >
+        Publish
+      </label>
+    </div>
   );
 };
 
