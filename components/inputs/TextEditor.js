@@ -5,15 +5,12 @@ const Editor = forwardRef(({ ...props }, ref) => {
   const editorRef = useRef(null);
   return (
     <Tinymce
-      ref={ref}
+      ref={props.ref}
       apiKey={process.env.NEXT_PUBLIC_TINYMCE}
       onInit={(evt, editor) => (editorRef.current = editor)}
-      initialValue=""
-      {...props}
       textareaName={props.name}
-      onChange={props.onChange}
-      onBlur={props.onBlur}
       value={props.value}
+      onEditorChange={props.onChange}
       init={{
         height: 300,
         menubar: false,

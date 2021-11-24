@@ -2,10 +2,11 @@ import backendApi from "configs/api/backendApi";
 import React, { useState, useEffect } from "react";
 import useSWRImmutable from "swr/immutable";
 import { ContainerCard, HeaderCard, BodyCard } from "../Card";
+import { Controller } from "react-hook-form";
 
-const CardCategory = () => {
+const CardCategory = ({ control, defaultCategories: defCat }) => {
   const { data, error } = useSWRImmutable("/categories", backendApi.get);
-  const [category, setCategory] = useState([]);
+  const [categories, setCategory] = useState([]);
   const [isOpen, setIsOpen] = React.useState(true);
   const [activePage, setActivePage] = React.useState(0);
 
@@ -32,20 +33,29 @@ const CardCategory = () => {
             >
               All Categories
             </button>
-            {/* <button
-              type="button"
-              className={`px-4 py-2 ${activePage === 1 && "bg-[#F5F5F5]"}`}
-              onClick={() => setActivePage(1)}
-            >
-              Most Used
-            </button> */}
           </div>
           <div className="bg-[#F5F5F5]">
             <div className={`px-4 py-3 ${activePage !== 0 && "hidden"}`}>
-              {category.map((item) => (
-                <CheckBoxItem key={item.id} name="category" value={item.id}>
-                  {item.name}
-                </CheckBoxItem>
+              {categories.map((item, index) => (
+                <Controller
+                  key={item.id}
+                  control={control}
+                  name={`category[${item.id}]`}
+                  defaultValue={!!defCat.find((cat) => cat.id === item.id)}
+                  render={({
+                    field: { onChange, onBlur, value, name, ref },
+                  }) => (
+                    <CheckBoxItem
+                      name={name}
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      checked={value}
+                      ref={ref}
+                    >
+                      {item.name}
+                    </CheckBoxItem>
+                  )}
+                />
               ))}
             </div>
           </div>
@@ -55,13 +65,15 @@ const CardCategory = () => {
   );
 };
 
-const CheckBoxItem = ({ children, ...props }) => {
+const CheckBoxItem = React.forwardRef(({ children, ...props }, ref) => {
   return (
     <label className="flex items-center">
-      <input type="checkbox" className="mr-2" {...props} />
+      <input ref={ref} type="checkbox" className="mr-2" {...props} />
       {children}
     </label>
   );
-};
+});
+
+CheckBoxItem.displayName = "CheckBoxItem";
 
 export default CardCategory;
