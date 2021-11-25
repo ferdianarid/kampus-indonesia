@@ -16,7 +16,7 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }) => {
         <Head>
           <title>Informasi Kampus</title>
           <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+          <link rel="preconnect" href="https://fonts.gstatic.com" />
 
           <link rel="icon" href="/favicon.ico" />
         </Head>

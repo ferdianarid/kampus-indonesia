@@ -1,7 +1,7 @@
 import React, { useRef, forwardRef } from "react";
 import { Editor as Tinymce } from "@tinymce/tinymce-react";
 
-const Editor = forwardRef(({ ...props }, ref) => {
+const Editor = forwardRef<any, any>(({ ...props }, ref) => {
   const editorRef = useRef(null);
   return (
     <Tinymce

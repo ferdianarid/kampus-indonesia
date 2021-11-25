@@ -4,7 +4,7 @@ import backendApi from "configs/api/backendApi";
 
 const SelectCategory = ({ value, onChange, ...props }) => {
   const [category, setCategory] = useState([]);
-  const { data, error } = useSWRImmutable("/categories", backendApi.get);
+  const { data, error }: any = useSWRImmutable("/categories", backendApi.get);
 
   useEffect(() => {
     if (data) {

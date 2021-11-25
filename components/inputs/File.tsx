@@ -1,6 +1,13 @@
 import React from "react";
+import { LabelHTMLAttributes } from "react";
 
-const File = React.forwardRef(
+interface Props {
+  label?: string;
+  containerClassName?: string;
+  labelProps?: LabelHTMLAttributes<HTMLElement>;
+}
+
+const File = React.forwardRef<HTMLInputElement, Props>(
   ({ label, containerClassName, labelProps, ...props }, ref) => {
     return (
       <div className={`flex flex-col ${containerClassName}`}>

@@ -4,8 +4,14 @@ import useSWRImmutable from "swr/immutable";
 import { ContainerCard, HeaderCard, BodyCard } from "../Card";
 import { Controller } from "react-hook-form";
 
-const CardCategory = ({ control, defaultCategories: defCat }) => {
-  const { data, error } = useSWRImmutable("/categories", backendApi.get);
+const CardCategory = ({
+  control,
+  defaultCategories: defCat,
+}: {
+  control: any;
+  defaultCategories: any;
+}) => {
+  const { data, error }: any = useSWRImmutable("/categories", backendApi.get);
   const [categories, setCategory] = useState([]);
   const [isOpen, setIsOpen] = React.useState(true);
   const [activePage, setActivePage] = React.useState(0);
@@ -65,14 +71,16 @@ const CardCategory = ({ control, defaultCategories: defCat }) => {
   );
 };
 
-const CheckBoxItem = React.forwardRef(({ children, ...props }, ref) => {
-  return (
-    <label className="flex items-center">
-      <input ref={ref} type="checkbox" className="mr-2" {...props} />
-      {children}
-    </label>
-  );
-});
+const CheckBoxItem = React.forwardRef<HTMLInputElement, any>(
+  ({ children, ...props }, ref) => {
+    return (
+      <label className="flex items-center">
+        <input ref={ref} type="checkbox" className="mr-2" {...props} />
+        {children}
+      </label>
+    );
+  }
+);
 
 CheckBoxItem.displayName = "CheckBoxItem";
 

@@ -1,6 +1,21 @@
 import Image from "next/image";
 
-export const ContainerCard = ({ className, children, ...props }) => {
+interface ContainerCardProps {
+  className?: string;
+  children: any;
+}
+
+interface HeaderCardProps {
+  setOpen: () => any;
+  title: string;
+  isOpen: boolean;
+}
+
+export const ContainerCard = ({
+  className,
+  children,
+  ...props
+}: ContainerCardProps) => {
   return (
     <div className={`mb-5 bg-white ${className}`} {...props}>
       {children}
@@ -8,7 +23,7 @@ export const ContainerCard = ({ className, children, ...props }) => {
   );
 };
 
-export const HeaderCard = ({ setOpen, title, isOpen }) => {
+export const HeaderCard = ({ setOpen, title, isOpen }: HeaderCardProps) => {
   return (
     <div
       onClick={setOpen}

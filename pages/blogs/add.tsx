@@ -104,7 +104,7 @@ const AddUniversity = () => {
                 <CardPublish clickDraft={handleSubmit(handleClickDraft)} />
               </div>
               <div className="order-1 lg:order-1">
-                <CardCategory register={register} />
+                <CardCategory />
               </div>
             </div>
           </form>

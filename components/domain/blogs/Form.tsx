@@ -30,6 +30,7 @@ const Form = ({ id, title, cover, content, categories, isPublised }) => {
       test: [],
       title: title,
       content: content,
+      image: null,
     },
     resolver: yupResolver(
       yup.object({
@@ -83,7 +84,7 @@ const Form = ({ id, title, cover, content, categories, isPublised }) => {
           alt="Cover Article"
           objectFit="cover"
           layout="fill"
-          placeholder={placeholderBlog}
+          placeholder={"blur"}
         />
       </div>
 

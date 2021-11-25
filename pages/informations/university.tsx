@@ -86,6 +86,7 @@ const University = () => {
             </div>
             {universities.map(({ id, name, address, img, isChecked }) => (
               <UnivItem
+                id={id}
                 key={id}
                 name={name}
                 address={address}

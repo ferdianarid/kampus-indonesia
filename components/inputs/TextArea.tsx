@@ -1,7 +1,13 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
-const TextArea = React.forwardRef(
-  ({ children, label, labelProps, errorMessage, ...props }, ref) => {
+interface Props {
+  label?: string;
+  labelProps?: any;
+  errorMessage?: ReactNode;
+}
+
+const TextArea = React.forwardRef<any, Props>(
+  ({ label, labelProps, errorMessage, children, ...props }, ref) => {
     return (
       <div className="flex flex-col mt-5 mb-7 relative">
         <label className="text-xl mb-2" {...labelProps}>

@@ -8,14 +8,15 @@ import { useSession } from "next-auth/react";
 import { commonErrorHandler } from "@utils/index";
 import { useState } from "react";
 
-const Publish = ({
-  id,
-  isPublised,
-  isFetching,
-  clickDraft,
-  className,
-  ...props
-}) => {
+interface PublishProps {
+  id?: string | number;
+  isPublised?: boolean;
+  isFetching?: boolean;
+  clickDraft?: any;
+  className?: string;
+}
+
+const Publish = ({ id, isPublised, isFetching, clickDraft }: PublishProps) => {
   const [isOpen, setIsOpen] = React.useState(true);
   return (
     <ContainerCard>

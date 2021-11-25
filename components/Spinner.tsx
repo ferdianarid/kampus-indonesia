@@ -1,4 +1,4 @@
-const Spinner = ({ className, ...props }) => {
+const Spinner = ({ className }: { className?: string }) => {
   return (
     <div
       className={`flex items-center justify-center space-x-2 animate-pulse ${className}`}

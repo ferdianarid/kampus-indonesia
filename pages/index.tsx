@@ -1,7 +1,11 @@
 import AdminLayout from "@components/layouts/AdminLayout";
 
 const Home = () => {
-  return <AdminLayout></AdminLayout>;
+  return (
+    <AdminLayout>
+      <div></div>
+    </AdminLayout>
+  );
 };
 
 Home.auth = {

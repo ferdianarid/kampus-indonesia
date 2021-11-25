@@ -1,6 +1,13 @@
 import React from "react";
 
-const Input = React.forwardRef(
+interface Props {
+  label?: string;
+  containerProps?: any;
+  labelProps?: string;
+  errorMessage?: string;
+}
+
+const Input = React.forwardRef<HTMLInputElement, Props>(
   ({ label, containerProps, labelProps, errorMessage, ...props }, ref) => {
     return (
       <div className="flex flex-col relative" {...containerProps}>

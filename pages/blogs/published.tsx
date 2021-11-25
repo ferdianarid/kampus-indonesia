@@ -14,12 +14,6 @@ import LoadingPlaceholder from "@components/domain/blogs/LoadingPlaceholder";
 import SelectCategory from "@components/domain/blogs/SelectCategory";
 import { useSession } from "next-auth/react";
 
-const apiAllCat = ({ activePage }) => `/panel/articles?page=${activePage}`;
-const apiSearch = ({ activePage }) =>
-  `/panel/articles/search?page=${activePage}`;
-const apiOneCat = ({ activePage, idCategory }) =>
-  `panel/articles/categories/all/${idCategory}?page=${activePage}`;
-
 const Published = () => {
   const { data: session } = useSession();
   const [page, setPage] = useState({
@@ -323,7 +317,13 @@ const Published = () => {
   );
 };
 
-const PageNumber = ({ isActive, children }) => {
+interface PageNumber {
+  isActive: boolean;
+  children: any;
+  onClick: any;
+}
+
+const PageNumber = ({ isActive, children }: PageNumber) => {
   return (
     <div
       className={`w-8 md:flex justify-center items-center hidden cursor-pointer leading-5 transition duration-150 ease-in rounded-full ${
