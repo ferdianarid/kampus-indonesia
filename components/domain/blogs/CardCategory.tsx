@@ -47,7 +47,7 @@ const CardCategory = ({
                   key={item.id}
                   control={control}
                   name={`category[${item.id}]`}
-                  defaultValue={!!defCat.find((cat) => cat.id === item.id)}
+                  defaultValue={!!defCat?.find((cat) => cat.id === item.id)}
                   render={({
                     field: { onChange, onBlur, value, name, ref },
                   }) => (

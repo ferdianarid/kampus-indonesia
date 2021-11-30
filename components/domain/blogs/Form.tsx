@@ -12,10 +12,20 @@ import backendApi from "configs/api/backendApi";
 import { toast } from "react-toastify";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import placeholderBlog from "@public/placeholder-blog.png";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
-const Form = ({ id, title, cover, content, categories, isPublised }) => {
+interface Props {
+  id?: number;
+  title?: string;
+  cover?: string;
+  content?: string;
+  categories?: any;
+  isPublised?: boolean;
+}
+
+const Form = ({ id, title, cover, content, categories, isPublised }: Props) => {
+  const router = useRouter();
   const { data: session } = useSession();
   const [isFetching, setIsFetching] = useState(false);
 
@@ -27,7 +37,6 @@ const Form = ({ id, title, cover, content, categories, isPublised }) => {
   } = useForm({
     mode: "onSubmit",
     defaultValues: {
-      test: [],
       title: title,
       content: content,
       image: null,
@@ -43,7 +52,9 @@ const Form = ({ id, title, cover, content, categories, isPublised }) => {
     try {
       const form = new FormData();
       form.append("title", data.title);
-      if (!!data.image[0]) form.append("cover", data.image[0]);
+      if (!!data?.image?.legth) {
+        form.append("cover", data.image[0]);
+      }
       form.append("content", data.content);
 
       // add categories
@@ -66,7 +77,12 @@ const Form = ({ id, title, cover, content, categories, isPublised }) => {
       toast("Yeyyy aksi berhasil", {
         type: "success",
       });
+
+      setTimeout(() => {
+        router.push("/blogs/published");
+      }, 1000);
     } catch (error) {
+      console.log(error);
       commonErrorHandler(error);
     }
 
@@ -78,15 +94,16 @@ const Form = ({ id, title, cover, content, categories, isPublised }) => {
       onSubmit={handleSubmit(handleClickDraft)}
       className="grid gap-x-10 gap-y-4 grid-cols-1 lg:grid-cols-[1fr,300px]"
     >
-      <div className="col-span-1 lg:col-span-2 w-full relative h-[300px]">
-        <Image
-          src={cover}
-          alt="Cover Article"
-          objectFit="cover"
-          layout="fill"
-          placeholder={"blur"}
-        />
-      </div>
+      {cover && (
+        <div className="col-span-1 lg:col-span-2 w-full relative h-[300px]">
+          <Image
+            src={cover}
+            alt="Cover Article"
+            objectFit="cover"
+            layout="fill"
+          />
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-10 gap-y-4 auto-rows-min">
         <div className="col-span-2 lg:col-span-1">

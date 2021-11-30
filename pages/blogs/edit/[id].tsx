@@ -4,17 +4,17 @@ import AdminLayout from "@components/layouts/AdminLayout";
 import backendApi from "configs/api/backendApi";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import useSWRImmutable from "swr/immutable";
+import useSWR, { mutate } from "swr";
+
 import "react-toastify/dist/ReactToastify.css";
 
 const Edit = () => {
   const { data: session } = useSession();
 
-  const {
-    query: { id },
-  } = useRouter();
+  const { query } = useRouter();
+  const id = parseInt(query.id as string);
 
-  const { data, error } = useSWRImmutable(
+  const { data, error } = useSWR(
     [`/panel/articles/show/${id}`, session],
     (endPoint, session) =>
       backendApi
@@ -60,6 +60,7 @@ const Edit = () => {
                 />
               );
             })()}
+          {error && "Upsss ada error nih"}
         </div>
       </AdminLayout>
     </>

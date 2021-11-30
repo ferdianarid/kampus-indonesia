@@ -1,6 +1,7 @@
 import AdminLayout from "@components/layouts/AdminLayout";
 
 const Home = () => {
+  
   return (
     <AdminLayout>
       <div></div>

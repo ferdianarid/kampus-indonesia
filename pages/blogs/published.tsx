@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, FormEvent } from "react";
 import HeaderPagesInformation from "@components/HeaderPagesInformation";
 import AdminLayout from "@components/layouts/AdminLayout";
 import MyCheckbox from "@components/MyCheckbox";
@@ -13,42 +13,37 @@ import ButtonLg from "@components/ButtonLg";
 import LoadingPlaceholder from "@components/domain/blogs/LoadingPlaceholder";
 import SelectCategory from "@components/domain/blogs/SelectCategory";
 import { useSession } from "next-auth/react";
+import { useAppDispatch, useAppSelector } from "configs/redux/hooks";
+import {
+  changePage,
+  updateCatgory,
+  updateDataPage,
+  updateSearch,
+} from "configs/redux/reducers/blogSlice";
 
 const Published = () => {
-  const { data: session } = useSession();
-  const [page, setPage] = useState({
-    active: 1,
-    last: 1,
-    from: 1,
-  });
+  const dispatch = useAppDispatch();
+  const { category, curPage, lastPage, search, fullEndPoint } = useAppSelector(
+    (state) => state.blog.page
+  );
 
-  const [endPoint, setEndPoint] = useState("");
-  const [category, setCategory] = useState("");
-  const [search, setSearch] = useState("");
+  const { data: session } = useSession();
+
   const [blogs, setBlogs] = useState([]);
   const [isCheckAll, setCheckAll] = useState(false);
 
-  // handle change api
-  useEffect(() => {
-    if (search !== "") {
-      setCategory("");
-      setEndPoint(`/panel/articles/search?page=${page.active}`);
-    } else if (category !== "") {
-      setEndPoint(
-        `/panel/articles/categories/all/${category}?page=${page.active}`
-      );
-    } else {
-      setEndPoint(`/panel/articles?page=${page.active}`);
-    }
-  }, [search, page, endPoint, category]);
+  // console.log(typeof search, search);
+  // console.log("search", search !== "");
 
   const { data, error } = useSWRImmutable(
-    [endPoint, session, category, search],
-    (endPoint, session, category, search) => {
+    [fullEndPoint, session, search],
+    (fullEndPoint, session, search) => {
+      console.log(fullEndPoint);
+      console.log("s", search !== "");
       if (search !== "") {
         return backendApi
           .post(
-            endPoint,
+            fullEndPoint,
             {
               search: search,
             },
@@ -62,7 +57,7 @@ const Published = () => {
       }
       if (category === "") {
         return backendApi
-          .get(endPoint, {
+          .get(fullEndPoint, {
             headers: {
               Authorization: "Bearer " + session.access_token,
             },
@@ -70,7 +65,7 @@ const Published = () => {
           .then((res) => res.data);
       } else {
         return backendApi
-          .post(endPoint, [], {
+          .post(fullEndPoint, [], {
             headers: {
               Authorization: "Bearer " + session.access_token,
             },
@@ -85,10 +80,8 @@ const Published = () => {
       // search
       if (search !== "") {
         // reset all
-        setCategory("");
-
         if (data.data.data) {
-          const blogsMapped = data.data.data.map((item) => ({
+          const blogsMapped = data.data.data?.map((item) => ({
             ...item,
             isChecked: false,
           }));
@@ -110,7 +103,7 @@ const Published = () => {
 
       // one category
       else {
-        const blogsMapped = data.data.data.map((item) => ({
+        const blogsMapped = data.data.data?.map((item) => ({
           ...item,
           isChecked: false,
         }));
@@ -118,22 +111,18 @@ const Published = () => {
         setBlogs(blogsMapped);
       }
 
-      setPage({
-        active: data.data.current_page,
-        last: data.data.last_page,
-        from: data.data.from,
-      });
+      const { lastPage, last_page: totalPage } = data.data;
+      dispatch(
+        updateDataPage({ lastPage: lastPage || 1, totalPage: totalPage || 1 })
+      );
     } else {
       setBlogs([]);
     }
-  }, [data, error, category, search]);
-
-  useEffect(() => {}, [page]);
+  }, [data, category, search, dispatch]);
 
   const handleChangeCategory = (e) => {
     const idCategory = e.target.value;
-
-    setCategory(idCategory);
+    dispatch(updateCatgory(idCategory));
   };
 
   const handleCheck = (e) => {
@@ -177,15 +166,14 @@ const Published = () => {
                   onChange={handleChangeCategory}
                 />
                 <form
-                  onSubmit={(e) => {
+                  onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
                     e.preventDefault();
-                    setSearch(e.target.elements.search.value);
-                    // reset active page
-                    setPage({
-                      active: 1,
-                      from: 1,
-                      last: 1,
-                    });
+                    const formEl = e.target as HTMLFormElement;
+                    const searchEl = formEl.elements.namedItem(
+                      "search"
+                    ) as HTMLInputElement;
+                    console.log(typeof searchEl.value);
+                    dispatch(updateSearch(searchEl.value));
                   }}
                 >
                   <input
@@ -217,64 +205,65 @@ const Published = () => {
                   <hr />
                 </>
               )}
-              {blogs.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex items-center py-4 border-b-2 last:border-b-0 border-gray-300"
-                >
-                  <MyCheckbox
-                    name={"univ"}
-                    value={item.id}
-                    isChecked={item.isChecked}
-                    onChange={handleCheck}
-                  />
-                  <Image
-                    loading="lazy"
-                    src={item.cover}
-                    objectFit="cover"
-                    className="rounded-md"
-                    width={87}
-                    height={64}
-                    alt="Cover image"
-                  />
+              {blogs &&
+                blogs.map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center py-4 border-b-2 last:border-b-0 border-gray-300"
+                  >
+                    <MyCheckbox
+                      name={"univ"}
+                      value={item.id}
+                      isChecked={item.isChecked}
+                      onChange={handleCheck}
+                    />
+                    <Image
+                      loading="lazy"
+                      src={item.cover}
+                      objectFit="cover"
+                      className="rounded-md"
+                      width={87}
+                      height={64}
+                      alt="Cover image"
+                    />
 
-                  <div className="ml-8 flex-grow">
-                    <h3 className="text-primary font-bold">{item.title}</h3>
-                    <div className="text-primary font-roboto text-sm font-light text-opacity-70">
-                      {item.categories ? (
-                        item.categories
-                          .map((categorie) => categorie.name)
-                          .join(", ")
-                      ) : (
-                        <div>&nbsp;</div>
-                      )}
+                    <div className="ml-8 flex-grow">
+                      <h3 className="text-primary font-bold">{item.title}</h3>
+                      <div className="text-primary font-roboto text-sm font-light text-opacity-70">
+                        {item.categories ? (
+                          item.categories
+                            .map((categorie) => categorie.name)
+                            .join(", ")
+                        ) : (
+                          <div>&nbsp;</div>
+                        )}
+                      </div>
+                      <h6 className="text-xs font-roboto font-light mt-1">
+                        {DateTime.fromISO(item.created_at).toFormat(
+                          "dd MMMM yyyy"
+                        )}
+                      </h6>
                     </div>
-                    <h6 className="text-xs font-roboto font-light mt-1">
-                      {DateTime.fromISO(item.created_at).toFormat(
-                        "dd MMMM yyyy"
-                      )}
-                    </h6>
-                  </div>
 
-                  <div className="flex items-center">
-                    <Link href={`/blogs/edit/${item.id}`}>
-                      <a className="bg-primary text-white py-2 px-5 rounded-3xl mr-2">
-                        Edit
-                      </a>
-                    </Link>
-                    <button className="w-[40px] h-[40px] flex items-center justify-center bg-gray-200 text-white py-1 px-1 rounded-full">
-                      <Image
-                        src="/icons/more-horizontal.svg"
-                        alt="Icon menu"
-                        width={"24px"}
-                        height={"24px"}
-                      />
-                    </button>
+                    <div className="flex items-center">
+                      <Link href={`/blogs/edit/${item.id}`}>
+                        <a className="bg-primary text-white py-2 px-5 rounded-3xl mr-2">
+                          Edit
+                        </a>
+                      </Link>
+                      <button className="w-[40px] h-[40px] flex items-center justify-center bg-gray-200 text-white py-1 px-1 rounded-full">
+                        <Image
+                          src="/icons/more-horizontal.svg"
+                          alt="Icon menu"
+                          width={"24px"}
+                          height={"24px"}
+                        />
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
 
-              {!blogs.length && data && !error && (
+              {blogs && !blogs.length && data && !error && (
                 <div className="flex items-center flex-col py-10">
                   <div className="mb-4">
                     <Image
@@ -293,20 +282,14 @@ const Published = () => {
               )}
 
               <Pagination
-                activePage={page.active}
-                lastPage={page.last}
+                activePage={curPage}
+                lastPage={lastPage}
                 onClickBack={() => {
-                  setPage({
-                    ...page,
-                    active: page.active - 1,
-                  });
+                  dispatch(changePage(curPage - 1));
                 }}
                 onClick={() => {}}
                 onClickNext={() => {
-                  setPage({
-                    ...page,
-                    active: page.active + 1,
-                  });
+                  dispatch(changePage(curPage + 1));
                 }}
               />
             </div>

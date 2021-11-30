@@ -6,12 +6,10 @@ const Auth = ({ authenticatedRedirect, role, children, ...props }) => {
   const isUser = !!session?.user;
 
   React.useEffect(() => {
-    // When rendering client side don't display anything until loading is complete
     if (status === "loading") return null;
     if (!isUser & !authenticatedRedirect) signIn();
   }, [isUser, status, authenticatedRedirect]);
 
-  console.log(isUser);
   if (isUser) {
     // Redirect ke authenticatedRedirect
     if (!!authenticatedRedirect) {
@@ -19,6 +17,7 @@ const Auth = ({ authenticatedRedirect, role, children, ...props }) => {
       return null;
     }
 
+    // denied jika role tidak sesuai
     if (role && role !== session.user.role) {
       return (
         <div className="flex flex-col items-center justify-center h-screen w-screen">
@@ -36,7 +35,9 @@ const Auth = ({ authenticatedRedirect, role, children, ...props }) => {
     }
 
     return children;
-  } else if (!!authenticatedRedirect) {
+  }
+  // show page di authenticatedRedirect jika user belum login
+  else if (!!authenticatedRedirect) {
     return children;
   }
 
