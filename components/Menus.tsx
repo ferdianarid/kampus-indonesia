@@ -8,7 +8,7 @@ const Menus = () => {
     <div>
       <Menu href="/">Dashboard</Menu>
       <ContainerSubmenu text="Blog">
-        <Menu href="/blogs/posts">Posts</Menu>
+        <Menu href="">Posts</Menu>
         <Menu href="/blogs/published">Terpublish</Menu>
         <Menu href="/blogs/draft">Draft</Menu>
         <Menu href="/blogs/trash">Sampah</Menu>
