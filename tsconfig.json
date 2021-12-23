@@ -5,7 +5,11 @@
     "jsx": "preserve",
     "strictFunctionTypes": true,
     "sourceMap": true,
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -17,14 +21,28 @@
     "isolatedModules": true,
     "baseUrl": "./",
     "paths": {
-      "@components/*": ["components/*"],
-      "@request/*": ["request/*"],
-      "@libs/*": ["libs/*"],
-      "@public/*": ["public/*"],
-      "@utils/*": ["utils/*"]
-    }
+      "@components/*": [
+        "components/*"
+      ],
+      "@request/*": [
+        "request/*"
+      ],
+      "@libs/*": [
+        "libs/*"
+      ],
+      "@public/*": [
+        "public/*"
+      ],
+      "@utils/*": [
+        "utils/*"
+      ]
+    },
+    "incremental": true
   },
-  "exclude": ["node_modules", "**/node_modules/*"],
+  "exclude": [
+    "node_modules",
+    "**/node_modules/*"
+  ],
   "include": [
     "types/**/*.ts",
     "next-env.d.ts",

@@ -20,9 +20,12 @@ module.exports = {
     },
   },
   plugins: [
-    plugin(({ addUtilities }) => {
+    plugin(({
+      addUtilities
+    }) => {
       const utilities = {};
       addUtilities(utilities);
     }),
+    // require('@themesberg/flowbite/plugin')
   ],
 };

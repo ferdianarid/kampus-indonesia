@@ -1,7 +1,7 @@
-import { forwardRef } from "react";
+import { forwardRef, AnchorHTMLAttributes } from "react";
 
-interface Props {
-  className?: string;
+interface Props extends AnchorHTMLAttributes<HTMLAnchorElement> {
+  className: string;
   children?: string;
 }
 
