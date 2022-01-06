@@ -1,7 +1,7 @@
 import { forwardRef, AnchorHTMLAttributes } from "react";
 
 interface Props extends AnchorHTMLAttributes<HTMLAnchorElement> {
-  className: string;
+  className?: string;
   children?: string;
 }
 

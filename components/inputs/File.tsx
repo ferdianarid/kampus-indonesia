@@ -1,7 +1,7 @@
-import React from "react";
+import React, { InputHTMLAttributes } from "react";
 import { LabelHTMLAttributes } from "react";
 
-interface Props {
+interface Props extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   containerClassName?: string;
   labelProps?: LabelHTMLAttributes<HTMLElement>;

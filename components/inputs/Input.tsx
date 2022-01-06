@@ -1,6 +1,6 @@
-import React from "react";
+import React, { InputHTMLAttributes } from "react";
 
-interface Props {
+interface Props extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   containerProps?: any;
   labelProps?: string;
@@ -8,7 +8,10 @@ interface Props {
 }
 
 const Input = React.forwardRef<HTMLInputElement, Props>(
-  ({ label, containerProps, labelProps, errorMessage, ...props }, ref) => {
+  (
+    { label, containerProps, labelProps, errorMessage, type, ...props },
+    ref
+  ) => {
     return (
       <div className="flex flex-col relative" {...containerProps}>
         <label className="text-xl mb-2 text-primary" {...labelProps}>
@@ -16,7 +19,7 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
         </label>
         <input
           ref={ref}
-          type="text"
+          type={type ?? "text"}
           className={`px-2 py-1 border-2 focus:outline-none focus:border-primary ${
             errorMessage && "focus:border-red-500 border-red-400"
           }`}
