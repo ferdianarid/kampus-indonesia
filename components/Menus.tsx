@@ -15,7 +15,7 @@ const Menus = () => {
       </ContainerSubmenu>
       <ContainerSubmenu link="informations" text="Informasi">
         <Menu href="/informations/university">Kampus / Jurusan</Menu>
-        <Menu href="/informations/scholarship">Beasiswa</Menu>
+        <Menu href="/informations/schoolarship">Beasiswa</Menu>
         <Menu href="/informations/event">Event</Menu>
         <Menu href="/informations/internship">Magang</Menu>
       </ContainerSubmenu>
