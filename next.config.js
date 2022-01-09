@@ -4,8 +4,7 @@ module.exports = {
     domains: ["127.0.0.1", "sandbox-api.kampusindonesia.co.id"],
   },
   async rewrites() {
-    return [
-      {
+    return [{
         source: "/login",
         destination: "/auth/login",
       },

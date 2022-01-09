@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "name": "Universita Brawijaya",
+        "address": "Jalan Veteran Malang, Jawa Timur",
+        "img": "/logos/ub.png"
+    },
+    {
+        "id": 2,
+        "name": "Universitas Airlangga",
+        "address": "Alamat Universitas",
+        "img": "/logos/airlangga.png"
+    },
+    {
+        "id": 3,
+        "name": "Universita Gajah Mada",
+        "address": "Alamat Universitas",
+        "img": "/logos/ugm.png"
+    },
+    {
+        "id": 4,
+        "name": "Binus",
+        "address": "Alamat Universitas",
+        "img": "/logos/binus.png"
+    }
+]

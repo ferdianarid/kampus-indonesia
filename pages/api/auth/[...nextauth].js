@@ -82,6 +82,7 @@ export default NextAuth({
     async session({ session, token, user }) {
       if (token) {
         const { access_token, role, expires } = token;
+        console.log("exp", expires);
         session = {
           ...session,
           expires: DateTime.local().plus(expires).toUTC().toString(),
