@@ -1,21 +1,21 @@
 import React from "react";
-import Form from "@components/domain/informations/events/Form";
 import HeaderPageAdd from "@components/domain/informations/HeaderPageAdd";
 import AdminLayout from "@components/layouts/AdminLayout";
+import Form from "@components/domain/informations/event/Form";
 
-const AddUniversity = () => {
+const Add = () => {
   return (
     <AdminLayout>
       <div className="mx-10">
-        <HeaderPageAdd>Buat Event</HeaderPageAdd>
+        <HeaderPageAdd>Buat Informasi Event</HeaderPageAdd>
         <Form />
       </div>
     </AdminLayout>
   );
 };
 
-AddUniversity.auth = {
+Add.auth = {
   role: "admin",
 };
 
-export default AddUniversity;
+export default Add;
