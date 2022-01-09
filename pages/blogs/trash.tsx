@@ -10,10 +10,7 @@ const Draft = () => {
   return (
     <AdminLayout>
       <div className="">
-        <HeaderPagesInformation
-          title="Terpublish"
-          uploadPagePath="/blogs/add"
-        />
+        <HeaderPagesInformation title="Sampah" uploadPagePath="/blogs/add" />
         <div className="bg-white rounded-md mt-8">
           <div className="p-4 border-gray-300">
             <div className="flex justify-between border-b-2 pb-5">
@@ -53,9 +50,7 @@ const Draft = () => {
                     alt="Ilustration Empty Blog"
                   />
                 </div>
-                <h3 className="text-primary">
-                  End Point Api Belum di Setting.
-                </h3>
+                <h3 className="text-primary">Belum ada data</h3>
                 <p className="text-sm text-primary opacity-80"></p>
               </div>
             </div>

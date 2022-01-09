@@ -7,7 +7,11 @@ const Editor = forwardRef<any, any>(({ ...props }, ref) => {
     <Tinymce
       ref={props.ref}
       apiKey={process.env.NEXT_PUBLIC_TINYMCE}
-      onInit={(evt, editor) => (editorRef.current = editor)}
+      initialValue={props.defaultValue}
+      onInit={(evt, editor) => {
+        editorRef.current = editor;
+        props?.onInit();
+      }}
       textareaName={props.name}
       value={props.value}
       onEditorChange={props.onChange}

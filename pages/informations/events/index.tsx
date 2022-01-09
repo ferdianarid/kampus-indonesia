@@ -135,7 +135,7 @@ const Published = () => {
     <AdminLayout>
       <div className="">
         <HeaderPagesInformation
-          title="Terpublish"
+          title="Informasi Event"
           uploadPagePath="/informations/events/add"
         />
         <div className="bg-white rounded-md mt-8">

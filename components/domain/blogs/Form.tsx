@@ -52,8 +52,9 @@ const Form = ({ id, title, cover, content, categories, isPublised }: Props) => {
     try {
       const form = new FormData();
       form.append("title", data.title);
-      if (!!data?.image?.legth) {
+      if (!!data?.image?.length) {
         form.append("cover", data.image[0]);
+        console.log(data.image);
       }
       form.append("content", data.content);
 

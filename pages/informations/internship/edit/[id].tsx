@@ -2,20 +2,24 @@ import React from "react";
 import HeaderPageAdd from "@components/domain/informations/HeaderPageAdd";
 import AdminLayout from "@components/layouts/AdminLayout";
 import Form from "@components/domain/informations/internship/Form";
+import { useRouter } from "next/router";
 
-const Add = () => {
+const Edit = () => {
+  const { query } = useRouter();
+  const id = parseInt(query.id as string);
+
   return (
     <AdminLayout>
       <div className="mx-10">
-        <HeaderPageAdd>Buat Informasi Magang</HeaderPageAdd>
-        <Form id={1} />
+        <HeaderPageAdd>Edit Informasi Magang</HeaderPageAdd>
+        <Form id={id} />
       </div>
     </AdminLayout>
   );
 };
 
-Add.auth = {
+Edit.auth = {
   role: "admin",
 };
 
-export default Add;
+export default Edit;

@@ -7,13 +7,13 @@ const Menus = () => {
   return (
     <div>
       <Menu href="/">Dashboard</Menu>
-      <ContainerSubmenu text="Blog">
-        <Menu href="">Posts</Menu>
+      <ContainerSubmenu link="blogs" text="Blog">
+        {/* <Menu href="">Posts</Menu> */}
         <Menu href="/blogs/published">Terpublish</Menu>
         <Menu href="/blogs/draft">Draft</Menu>
         <Menu href="/blogs/trash">Sampah</Menu>
       </ContainerSubmenu>
-      <ContainerSubmenu text="Informasi">
+      <ContainerSubmenu link="informations" text="Informasi">
         <Menu href="/informations/university">Kampus / Jurusan</Menu>
         <Menu href="/informations/scholarship">Beasiswa</Menu>
         <Menu href="/informations/events">Event</Menu>
@@ -23,9 +23,9 @@ const Menus = () => {
   );
 };
 
-const ContainerSubmenu = ({ text, children }) => {
+const ContainerSubmenu = ({ text, link, children }) => {
   const containerUrl = window.location.pathname.split("/").at(1); // ['', 'informations', 'event']
-  const itsOpened = containerUrl === "informations";
+  const itsOpened = containerUrl === link;
   const [isOpen, setIsOpen] = React.useState(itsOpened);
 
   // active when submenu opened

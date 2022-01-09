@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import useSWR, { mutate } from "swr";
 
 import "react-toastify/dist/ReactToastify.css";
+import Spinner from "@components/Spinner";
 
 const Edit = () => {
   const { data: session } = useSession();
@@ -32,17 +33,7 @@ const Edit = () => {
         <div className="mx-10">
           <HeaderPageAdd>Edit Artikel</HeaderPageAdd>
 
-          {!data && !error && (
-            <div className="mt-20">
-              <div
-                className={`flex flex-col items-center justify-center space-x-2 animate-pulse`}
-              >
-                <div>
-                  <div className="w-6 h-6 border-[3.5px] border-primary border-dotted rounded-full animate-spin"></div>
-                </div>
-              </div>
-            </div>
-          )}
+          {!data && !error && <Spinner />}
 
           {data &&
             (() => {

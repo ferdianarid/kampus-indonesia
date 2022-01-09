@@ -3,7 +3,7 @@ import AdminLayout from "@components/layouts/AdminLayout";
 const Scholarship = () => {
   return (
     <AdminLayout>
-      <div className="flex items-center justify-center min-h-full min-w-full">
+      <div className="flex items-center justify-center min-h-screen min-w-full">
         Coming Soon
       </div>
     </AdminLayout>
@@ -11,7 +11,7 @@ const Scholarship = () => {
 };
 
 Scholarship.auth = {
-  role: "user",
+  role: "admin",
 };
 
 export default Scholarship;

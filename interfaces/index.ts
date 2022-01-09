@@ -1,12 +1,17 @@
-export interface IPagination {
+export interface Pagination {
   postPerPage: number;
   currentPage: number;
   totalPost: number;
   lastPage: number;
 }
 
-export interface IApiError {
+export interface ErrApi {
   success: boolean;
   message: string;
   errors: { [key: string]: string[] };
+}
+
+export interface ResApi<T> {
+  success: boolean;
+  data: T;
 }

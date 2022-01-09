@@ -9,11 +9,9 @@ const Empty = () => {
       <div className="mb-4">
         <Image src={ilustrationEmptyBlog} alt="Ilustration Empty Blog" />
       </div>
-      <h3 className="text-primary">Belum ada Draft</h3>
-      <p className="text-sm text-primary opacity-80">
-        Setiap postingan bagus dimulai dengan satu kata.
-      </p>
-      <Link href={"/blogs/add"} passHref>
+      <h3 className="text-primary">Belum ada data</h3>
+      <p className="text-sm text-primary opacity-80"></p>
+      <Link href={"/informations/internship/add"} passHref>
         <ButtonLg className="mt-4">Publish</ButtonLg>
       </Link>
     </div>

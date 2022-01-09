@@ -5,30 +5,14 @@ import MyCheckbox from "@components/MyCheckbox";
 import { handleCheckAll, handleChangeCheck } from "@utils/checkboxHendler";
 import useSWRImmutable from "swr/immutable";
 import Image from "next/image";
-import backendApi from "configs/api/backendApi";
-import { DateTime } from "luxon";
 import ilustrationEmptyBlog from "@public/ilustration-empty-blog.svg";
-import Link from "next/link";
-import ButtonLg from "@components/ButtonLg";
-import LoadingPlaceholder from "@components/domain/blogs/LoadingPlaceholder";
 import SelectCategory from "@components/domain/blogs/SelectCategory";
-import { useSession } from "next-auth/react";
-import { useAppDispatch, useAppSelector } from "configs/redux/hooks";
-import {
-  changePage,
-  updateCatgory,
-  updateDataPage,
-  updateSearch,
-} from "configs/redux/reducers/blogSlice";
 
 const Draft = () => {
   return (
     <AdminLayout>
       <div className="">
-        <HeaderPagesInformation
-          title="Terpublish"
-          uploadPagePath="/blogs/add"
-        />
+        <HeaderPagesInformation title="Draft" uploadPagePath="/blogs/add" />
         <div className="bg-white rounded-md mt-8">
           <div className="p-4 border-gray-300">
             <div className="flex justify-between border-b-2 pb-5">
@@ -68,9 +52,7 @@ const Draft = () => {
                     alt="Ilustration Empty Blog"
                   />
                 </div>
-                <h3 className="text-primary">
-                  End Point Api Belum di Setting.
-                </h3>
+                <h3 className="text-primary">Belum ada data</h3>
                 <p className="text-sm text-primary opacity-80"></p>
               </div>
             </div>

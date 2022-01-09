@@ -17,7 +17,20 @@ export interface IIntership {
   deleted_at?: string;
 }
 
-export interface DTOGetAllData {
+export interface IForm {
+  field: string;
+  title: string;
+  description: string;
+  company: string;
+  location: string;
+  period: string;
+  deadline: string;
+  registration_link: string;
+  publish: string;
+  logos: FileList;
+}
+
+export interface GetAllDTO {
   current_page: number;
   data: IIntership[];
   first_page_url: string;
@@ -32,20 +45,4 @@ export interface DTOGetAllData {
   total: number;
 }
 
-export interface IForm {
-  field: string;
-  title: string;
-  description: string;
-  company: string;
-  location: string;
-  period: string;
-  deadline: string;
-  registration_link: string;
-  publish: string;
-  logos: FileList;
-}
-
-export interface ApiGetAllData {
-  success: boolean;
-  data: DTOGetAllData;
-}
+export interface GetOneDTO extends IIntership {}

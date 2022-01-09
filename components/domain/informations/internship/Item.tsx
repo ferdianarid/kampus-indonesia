@@ -1,12 +1,6 @@
-import ButtonMenuHorizontal from "@components/ButtonMenuHorizontal";
 import ButtonPill from "@components/ButtonPill";
-import { commonErrorHandler } from "@utils/index.js";
-import { AxiosRequestConfig } from "axios";
-import backendApi from "configs/api/backendApi";
 import { IIntership } from "interfaces/Intership";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { toast } from "react-toastify";
 
 const Item = (props: {
   data: IIntership;
@@ -37,9 +31,15 @@ const Item = (props: {
       </div>
 
       <div className="flex items-center">
-        <ButtonPill link={`/blogs/edit/${id}`}>Edit</ButtonPill>
-        <button onClick={() => props.handleClickDelete(id)}>Hapus</button>
-        <ButtonMenuHorizontal />
+        <ButtonPill link={`/informations/internship/edit/${id}`}>
+          Edit
+        </ButtonPill>
+        <button
+          className="bg-primary text-white py-2 px-5 rounded-3xl mr-2"
+          onClick={() => props.handleClickDelete(id)}
+        >
+          Hapus
+        </button>
       </div>
     </div>
   );

@@ -9,7 +9,7 @@ import { useInternship } from "hooks/swr/internship";
 import { AxiosRequestConfig } from "axios";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
-import { IPagination } from "interfaces";
+import { Pagination as IPagination } from "interfaces";
 import backendApi from "configs/api/backendApi";
 import { toast } from "react-toastify";
 import { commonErrorHandler } from "@utils/index.js";
@@ -69,7 +69,6 @@ const Internship = () => {
     }
   }, [data, isError, isLoading]);
 
-  console.log(data);
   return (
     <AdminLayout>
       <div className="">
@@ -94,6 +93,7 @@ const Internship = () => {
                     name="search"
                     className="bg-search border-2 border-gray-300 px-3 pl-8 py-1 rounded-md min-w-[190px]"
                     placeholder="Search"
+                    disabled
                   />
                 </form>
               </div>
@@ -111,8 +111,9 @@ const Internship = () => {
                     handleClickDelete={handleClickDelete}
                   />
                 ))}
-
-              {data. && <Empty />}
+              <div className="text-white">
+                {Array.isArray(data) && <Empty />}
+              </div>
 
               <Pagination
                 activePage={pagination.currentPage}
